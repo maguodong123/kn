@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：对应的接口 -->
+<mapper namespace="kn.dao.mapper.SelectDataMapper">
+
+
+    <select id="QueryAll" resultType="kn.dao.entity.SelectData">
+		<![CDATA[
+		select
+			   mdm_datalibray.code code,
+			   b_dataview.id viewid,
+			   b_dataview.name viewname,
+			   B_PROPERTIES.name propertiessname,
+			   B_PROPERTIES.id propertiesid,
+			   count(*) count
+		from
+			 mdm_datalibray join b_datarule on mdm_datalibray.datarule=b_datarule.id
+			 join l_ruleview on l_ruleview.datarule=b_datarule.id
+			 join b_dataview on l_ruleview.dataview=b_dataview.id
+			 join l_viewproperties on l_viewproperties.dataview=b_dataview.id
+			 join b_properties on b_properties.id=l_viewproperties.properties
+			 join B_TASKPROPERTIES on B_TASKPROPERTIES.properties = b_properties.id and mdm_datalibray.task = B_TASKPROPERTIES.TASKBILL
+		where (md=1) and (not (b_dataview.name like '%仓储视图'))
+		group by mdm_datalibray.code,
+			   b_dataview.id,
+			   b_dataview.name,
+				B_PROPERTIES.id ,
+			   B_PROPERTIES.name
+		having count(*)>1
+        ]]>
+	</select>
+
+
+    <select id="QueryTask" resultType="java.lang.Integer">
+		<![CDATA[
+        select distinct B_TASKPROPERTIES.TASKBILL taskproperties_taskbill
+        from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+        where MDM_DATALIBRAY.CODE = #{code}
+        ]]>
+	</select>
+
+    <select id="getPropData" resultType="kn.dao.entity.PropertiesData">
+		<![CDATA[
+        select B_TASKPROPERTIES.id taskprid,
+               B_TASKPROPERTIES.TASKBILL taskprbill,
+               B_TASKPROPERTIES.PROPERTIES taskprties,
+               B_TASKPROPERTIES.PROPVALUE taskprvalue,
+               B_PROPERTIES.NAME propname,
+                L_Viewproperties.DATAVIEW lviewdataview,
+               B_DATAVIEW.NAME dataname
+        from B_TASKPROPERTIES join B_PROPERTIES on B_PROPERTIES.ID=B_TASKPROPERTIES.PROPERTIES
+                            join L_Viewproperties on B_PROPERTIES.ID= L_Viewproperties.PROPERTIES
+                            join B_DATAVIEW on L_VIEWPROPERTIES.DATAVIEW=B_DATAVIEW.ID
+        where B_TASKPROPERTIES.PROPERTIES = #{propertiesid} and B_TASKPROPERTIES.TASKBILL=#{taskproperties_taskbill}
+        ]]>
+	</select>
+
+
+    <delete id="deleteMdmProptype">
+		<![CDATA[
+        delete from Mdm_Proptype where TASKPROP = #{taskprop}
+        ]]>
+	</delete>
+
+    <delete id="deleteTaskProperties">
+		<![CDATA[
+        delete from B_TASKPROPERTIES where id = #{id}
+        ]]>
+	</delete>
+</mapper>
+
+
+
+
+
+

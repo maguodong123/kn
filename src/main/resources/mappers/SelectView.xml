@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：对应的接口 -->
+<mapper namespace="kn.dao.mapper.SelectViewMapper">
+
+
+	<select id="getTaskProperties" resultType="kn.dao.entity.TaskProperties">
+		<![CDATA[
+		select B_TASKPROPERTIES.ID,B_TASKPROPERTIES.TASKBILL,B_TASKPROPERTIES.PROPERTIES,B_TASKPROPERTIES.PROPVALUE,B_PROPERTIES.NAME
+		from B_TASKPROPERTIES
+		join L_VIEWPROPERTIES on B_TASKPROPERTIES.PROPERTIES = L_VIEWPROPERTIES.PROPERTIES
+        join B_PROPERTIES on B_TASKPROPERTIES.PROPERTIES = B_PROPERTIES.ID
+        where L_VIEWPROPERTIES.DATAVIEW =
+        (select B_DATAVIEW.ID from B_DATAVIEW where NAME= #{name})
+        and B_TASKPROPERTIES.TASKBILL =
+        (select distinct B_TASKPROPERTIES.TASKBILL from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+        where MDM_DATALIBRAY.CODE = #{code})]]>
+	</select>
+
+
+	<select id="getTaskPropertiesName" resultType="kn.dao.entity.TaskProperties">
+		<![CDATA[
+        select B_TASKPROPERTIES.ID,B_TASKPROPERTIES.TASKBILL,B_TASKPROPERTIES.PROPERTIES,B_TASKPROPERTIES.PROPVALUE,B_PROPERTIES.NAME
+		from B_TASKPROPERTIES
+		join L_VIEWPROPERTIES on B_TASKPROPERTIES.PROPERTIES = L_VIEWPROPERTIES.PROPERTIES
+        join B_PROPERTIES on B_TASKPROPERTIES.PROPERTIES = B_PROPERTIES.ID
+        where L_VIEWPROPERTIES.DATAVIEW =
+        (select  B_DATAVIEW.ID from B_DATAVIEW where NAME = #{name})
+        and B_TASKPROPERTIES.TASKBILL =
+        (select distinct B_TASKPROPERTIES.TASKBILL from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+        where MDM_DATALIBRAY.CODE = #{code})
+        and B_PROPERTIES.NAME= #{propname}]]>
+	</select>
+
+
+	<select id="getTaskPropertiesMRP" resultType="kn.dao.entity.TaskProperties">
+		<![CDATA[
+        select B_TASKPROPERTIES.ID,B_TASKPROPERTIES.TASKBILL,B_TASKPROPERTIES.PROPERTIES,B_TASKPROPERTIES.PROPVALUE,B_PROPERTIES.NAME
+		from B_TASKPROPERTIES
+		join L_VIEWPROPERTIES on B_TASKPROPERTIES.PROPERTIES = L_VIEWPROPERTIES.PROPERTIES
+        join B_PROPERTIES on B_TASKPROPERTIES.PROPERTIES = B_PROPERTIES.ID
+        where L_VIEWPROPERTIES.DATAVIEW =
+        (select  B_DATAVIEW.ID from B_DATAVIEW where NAME = #{name})
+        and B_TASKPROPERTIES.TASKBILL =
+        (select distinct B_TASKPROPERTIES.TASKBILL from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+        where MDM_DATALIBRAY.CODE = #{code})
+        and B_PROPERTIES.NAME in (#{cg},#{ts})]]>
+	</select>
+
+
+	<select id="getSap" resultType="kn.dao.entity.SAP">
+		<![CDATA[select * from SAP2019 where OLDCODE =#{oldcode} and FACTORY = #{factory}]]>
+	</select>
+
+    <insert id="insterSAP">
+		<![CDATA[insert into SAP2019 values(#{ID},#{OLDCODE},#{FACTORY},
+											#{MRPCG},#{MRPTS},#{CG},#{JH},#{CC}
+											,#{ZJ},#{KJ})]]>
+	</insert>
+
+	<select id="getTaskPropertiesID" resultType="java.lang.Integer">
+		<![CDATA[select id FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+	</select>
+
+
+
+	<update id="setProperties">
+		<![CDATA[update B_Taskproperties set PROPVALUE=#{value} where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+	</update>
+
+	<update id="setMdmPropType">
+		<![CDATA[update Mdm_Proptype set VALUE =#{value} where PROP = #{prop} and TASKPROP=#{taskProp}]]>
+	</update>
+
+
+	<select id="getMdmPropTypeValue" resultType="java.lang.String">
+		<![CDATA[select VALUE from Mdm_Proptype where PROP = #{prop} and TASKPROP= #{taskProp}]]>
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
