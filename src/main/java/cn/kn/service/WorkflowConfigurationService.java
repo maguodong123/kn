@@ -55,7 +55,6 @@ public class WorkflowConfigurationService {
 
         //第二步:循环所有单据,并循环对所有单据做出配置处理
         for (ProcessModel processModel : processModels) {
-            int viewId = 0;
             int bill = processModel.getId();
             int rule = processModel.getRuleID();
 
@@ -64,8 +63,8 @@ public class WorkflowConfigurationService {
                 viewName = factoryCode.concat(s);
                 dataViewName = processModel.getName() + "SAP" + factoryCode + s;
 
-                int msg = processingView(rule, bill, viewName, dataViewName);
-                if (msg == 0 || msg == 2) {
+                int viewId = processingView(rule, bill, viewName, dataViewName);
+                if (viewId == 1 || viewId == 2) {
                     continue;
                 }
 
@@ -182,7 +181,7 @@ public class WorkflowConfigurationService {
             if (viewName.equals((factoryCode + "仓储视图"))) {
                 wcm.insertActReAuditView(viewName, mrpViewId, ruleId, bill, processId);
             }
-            return 0;
+            return viewId;
         } catch (Exception e) {
             logger.error("系统程序运行异常!");
         }
