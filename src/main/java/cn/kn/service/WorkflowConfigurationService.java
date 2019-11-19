@@ -77,16 +77,16 @@ public class WorkflowConfigurationService {
                         if (auditProps.size() != 5) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
-                    } catch (CustomException e) {
-                        logger.error(ResultEnum.QuantityError.getMsg());
-                    }
-                    for (AuditProps auditProp : auditProps) {
-                        propName = auditProp.getPropName();
-                        if (propName.equals("库存确定组")) {
-                            wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 1, processId);
-                            continue;
+                        for (AuditProps auditProp : auditProps) {
+                            propName = auditProp.getPropName();
+                            if (propName.equals("库存确定组")) {
+                                wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 1, processId);
+                                continue;
+                            }
+                            wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
                         }
-                        wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
+                    } catch (Exception e) {
+                        logger.error(ResultEnum.QuantityError.getMsg());
                     }
                 }
 
@@ -96,24 +96,24 @@ public class WorkflowConfigurationService {
                         if (auditProps.size() != 35) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
-                    } catch (CustomException e) {
-                        logger.error(ResultEnum.QuantityError.getMsg());
-                    }
-                    for (AuditProps auditProp : auditProps) {
-                        propName = auditProp.getPropName();
-                        if (propName.equals("MRP类型") ||
-                                propName.equals("MRP控制者") ||
-                                propName.equals("批量大小") ||
-                                propName.equals("安全库存") ||
-                                propName.equals("期间标识") ||
-                                propName.equals("采购类型") ||
-                                propName.equals("浮动的计划边际码") ||
-                                propName.equals("可用性检查的检查组") ||
-                                propName.equals("对于独立和集中需求的相关需求标识")) {
-                            wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 1, processId);
-                            continue;
+                        for (AuditProps auditProp : auditProps) {
+                            propName = auditProp.getPropName();
+                            if (propName.equals("MRP类型") ||
+                                    propName.equals("MRP控制者") ||
+                                    propName.equals("批量大小") ||
+                                    propName.equals("安全库存") ||
+                                    propName.equals("期间标识") ||
+                                    propName.equals("采购类型") ||
+                                    propName.equals("浮动的计划边际码") ||
+                                    propName.equals("可用性检查的检查组") ||
+                                    propName.equals("对于独立和集中需求的相关需求标识")) {
+                                wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 1, processId);
+                                continue;
+                            }
+                            wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
                         }
-                        wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
+                    } catch (Exception e) {
+                        logger.error(ResultEnum.QuantityError.getMsg());
                     }
                 }
 
@@ -123,11 +123,11 @@ public class WorkflowConfigurationService {
                         if (auditProps.size() != 2) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
-                    } catch (CustomException e) {
+                        for (AuditProps auditProp : auditProps) {
+                            wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
+                        }
+                    } catch (Exception e) {
                         logger.error(ResultEnum.QuantityError.getMsg());
-                    }
-                    for (AuditProps auditProp : auditProps) {
-                        wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
                     }
                     try {
                         auditProps1 = wcm.getAuditPropsMRP(mrpViewId, bill, viewName, processId);//1
@@ -147,8 +147,6 @@ public class WorkflowConfigurationService {
             List<ViewProp> viewProp = wcm.getTaskEventName(rule, bill, viewName, dataViewName, processId);
             if (viewProp.isEmpty()) {
                 return 1;
-            } else if (viewProp.size() > 1) {
-                //处理多个视图的方法
             }
             int viewId = viewProp.get(0).getView();
             int ruleId = viewProp.get(0).getRule();
