@@ -4,108 +4,128 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.kn.dao.mapper.WorkflowConfigurationMapper">
 
-	<resultMap id="ProcessModelMap"
-			   type="cn.kn.dao.entity.ProcessModel">
-		<result column="ID" property="Id"/>
-		<result column="SV" property="SV"/>
-		<result column="F_ENABLE" property="Enable"/>
-		<result column="F_DATARULE" property="Rule"/>
-	</resultMap>
+    <resultMap id="ProcessModelMap"
+               type="cn.kn.dao.entity.ProcessModel">
+        <result column="ID" property="Id"/>
+        <result column="SV" property="SV"/>
+        <result column="F_ENABLE" property="Enable"/>
+        <result column="F_DATARULE" property="ruleID"/>
+    </resultMap>
 
-	<resultMap id="ViewPropMap"
-			   type="cn.kn.dao.entity.ViewProp">
-		<result column="ruleId" property="Rule"/>
-		<result column="viewId" property="View"/>
-		<result column="viewName" property="ViewName"/>
-		<result column="ID_" property="ID"/>
-	</resultMap>
+    <resultMap id="ViewPropMap"
+               type="cn.kn.dao.entity.ViewProp">
+        <result column="ruleId" property="ruleID"/>
+        <result column="viewId" property="viewID"/>
+        <result column="viewName" property="ViewName"/>
+        <result column="ID_" property="ID"/>
+    </resultMap>
 
-	<select id="getProcessModel" resultMap="ProcessModelMap">
-		<![CDATA[select ID,SV,NAME,F_ENABLE,F_DATARULE
-		 FROM (
-		 SELECT distinct(bl.id),bl.sv,bl.name,bl.f_enable,bl.f_datarule
-		 FROM b_bill bl join b_task bk
-		 ON bk.res like ''||'正式物资编码流程'||'%' and bl.id=bk.bill join b_datarule
-		 ON bl.f_datarule=b_datarule.id join l_category2bill cb
-		 ON cb.f_bill=bl.id
-		 WHERE 1=1)]]>
+    <select id="getProcessModel" resultMap="ProcessModelMap">
+		<![CDATA[
+        select ID,SV,NAME,F_ENABLE,F_DATARULE
+                 FROM (
+                 SELECT distinct(bl.id),bl.sv,bl.name,bl.f_enable,bl.f_datarule
+                 FROM b_bill bl join b_task bk
+                 ON bk.res like ''||'正式物资编码流程'||'%' and bl.id=bk.bill join b_datarule
+                 ON bl.f_datarule=b_datarule.id join l_category2bill cb
+                 ON cb.f_bill=bl.id
+                 WHERE 1=1)
+        ]]>
 	</select>
 
-	<select id="getTaskEventName" resultMap="ViewPropMap">
-		<![CDATA[select b_datarule.id ruleId,b_dataview.id viewId ,b_dataview.name viewName
-         FROM b_datarule
-         join l_ruleview
-         ON l_ruleview.datarule=b_datarule.id
-         and b_datarule.id=#{Rule}
-         join b_dataview
-         ON b_dataview.id=l_ruleview.dataview
-         LEFT JOIN act_re_auditview
-         ON b_dataview.id=act_re_auditview.view_id_
-         and taskevent_NAME_ = #{TaskEventNAME}
-         and bill_id_=#{Bill}
-         and act_def_id_=#{processId}
-		 where B_DATAVIEW.NAME = #{ViewName}]]>
-	</select>
-
-
-	<select id="getActReAuditView" resultType="java.lang.Integer">
-		<![CDATA[select ID_ from ACT_RE_AUDITVIEW
-		where TASKEVENT_NAME_=#{TaskEventNAME} and VIEW_ID_=#{View}
-		and RULE_ID_=#{Rule} and BILL_ID_=#{Bill} and ACT_DEF_ID_=#{processId}]]>
+    <select id="getTaskEventName" resultMap="ViewPropMap">
+		<![CDATA[
+        select b_datarule.id ruleId,b_dataview.id viewId ,b_dataview.name viewName
+                 FROM b_datarule
+                 join l_ruleview
+                 ON l_ruleview.datarule=b_datarule.id
+                 and b_datarule.id=#{ruleID}
+                 join b_dataview
+                 ON b_dataview.id=l_ruleview.dataview
+                 LEFT JOIN act_re_auditview
+                 ON b_dataview.id=act_re_auditview.view_id_
+                 and taskevent_NAME_ = #{taskEventName}
+                 and bill_id_=#{billID}
+                 and act_def_id_=#{processID}
+                 where B_DATAVIEW.NAME = #{viewName}
+        ]]>
 	</select>
 
 
-	<select id="getActReAuditProps" resultType="java.lang.Integer">
-		<![CDATA[select * from act_re_auditprops where TASKEVENT_NAME_=#{TaskEventNAME}
-		and BILL_ID_=#{Bill} and VIEW_ID_=#{View} and ACT_DEF_ID_=#{processId}]]>
+    <select id="getActReAuditView" resultType="java.lang.Integer">
+		<![CDATA[
+        select ID_ from ACT_RE_AUDITVIEW
+                where TASKEVENT_NAME_=#{taskEventName} and VIEW_ID_=#{viewID}
+                and RULE_ID_=#{ruleID} and BILL_ID_=#{billID} and ACT_DEF_ID_=#{processID}
+        ]]>
 	</select>
 
 
-	<insert id="insertActReAuditView">
-		<![CDATA[insert into act_re_auditview
-		values('1',#{ViewName},#{View},#{Rule},#{Bill},'1','1',#{processId})]]>
+    <select id="getActReAuditProps" resultType="java.lang.Integer">
+		<![CDATA[
+        select * from act_re_auditprops where TASKEVENT_NAME_=#{taskEventName}
+                and BILL_ID_=#{billID} and VIEW_ID_=#{viewID} and ACT_DEF_ID_=#{processID}
+        ]]>
+	</select>
+
+
+    <insert id="insertActReAuditView">
+		<![CDATA[
+        insert into act_re_auditview
+                values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1','1',#{processID})
+        ]]>
 	</insert>
 
-	<delete id="deleteActReAuditView">
-		<![CDATA[delete from act_re_auditview
-		where BILL_ID_ = #{Bill} and VIEW_ID_ = #{View} and ACT_DEF_ID_=#{processId}]]>
+    <delete id="deleteActReAuditView">
+		<![CDATA[
+        delete from act_re_auditview
+                where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}
+        ]]>
 	</delete>
 
-	<delete id="deleteActReAuditProps">
-		<![CDATA[delete from act_re_auditprops
-		where BILL_ID_ = #{Bill} and VIEW_ID_ = #{View} and ACT_DEF_ID_=#{processId}]]>
+    <delete id="deleteActReAuditProps">
+		<![CDATA[
+        delete from act_re_auditprops
+                where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}
+        ]]>
 	</delete>
 
 
-	<select id="getAuditProps" resultType="cn.kn.dao.entity.AuditProps">
-		<![CDATA[select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
-		b_properties.name propName,b_properties.id propId, is_have_ ishave ,is_notnull isnotnull
-		 FROM b_dataview join l_viewproperties
-		 ON b_dataview.id=#{View} and b_dataview.id=l_viewproperties.dataview join b_properties
-		 ON b_properties.id=l_viewproperties.properties
-		 LEFT JOIN act_re_auditprops
-		 ON l_viewproperties.properties= act_re_auditprops.prop_id_
-        and bill_id_=#{Bill} and taskevent_name_=#{TaskEventNAME}
-        and ACT_DEF_ID_=#{processId}]]>
+    <select id="getAuditProps" resultType="cn.kn.dao.entity.AuditProps">
+		<![CDATA[
+        select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
+                b_properties.name propName,b_properties.id propId, is_have_ ishave ,is_notnull isnotnull
+                 FROM b_dataview join l_viewproperties
+                 ON b_dataview.id=#{viewID} and b_dataview.id=l_viewproperties.dataview join b_properties
+                 ON b_properties.id=l_viewproperties.properties
+                 LEFT JOIN act_re_auditprops
+                 ON l_viewproperties.properties= act_re_auditprops.prop_id_
+                and bill_id_=#{billID} and taskevent_name_=#{taskEventName}
+                and ACT_DEF_ID_=#{processID}
+        ]]>
 	</select>
 
 
-	<insert id="insertActReAuditPropsStorageView">
-		<![CDATA[insert into act_re_auditprops values
-		('1',#{ViewName},#{Bill},#{View},#{propId},'1',#{IsNotNull},#{processId})]]>
+    <insert id="insertActReAuditPropsStorageView">
+		<![CDATA[
+        insert into act_re_auditprops values
+                ('1',#{viewName},#{billID},#{viewID},#{propID},'1',#{isNotNull},#{processID})
+        ]]>
 	</insert>
 
-	<select id="getAuditPropsMRP" resultType="cn.kn.dao.entity.AuditProps">
-		<![CDATA[select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
-		b_properties.name propName,b_properties.id propId, is_have_ ishave ,is_notnull isnotnull
-		 FROM b_dataview join l_viewproperties
-		 ON b_dataview.id=#{View} and b_dataview.id=l_viewproperties.dataview join b_properties
-		 ON b_properties.id=l_viewproperties.properties
-		 LEFT JOIN act_re_auditprops
-		 ON l_viewproperties.properties= act_re_auditprops.prop_id_
-        and bill_id_=#{Bill} and taskevent_name_=#{TaskEventNAME}
-        and ACT_DEF_ID_=#{processId}
-		where B_PROPERTIES.NAME = '发货仓储地点']]>
+    <select id="getAuditPropsMRP" resultType="cn.kn.dao.entity.AuditProps">
+		<![CDATA[
+        select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
+                b_properties.name propName,b_properties.id propId, is_have_ ishave ,is_notnull isnotnull
+                 FROM b_dataview join l_viewproperties
+                 ON b_dataview.id=#{viewID} and b_dataview.id=l_viewproperties.dataview join b_properties
+                 ON b_properties.id=l_viewproperties.properties
+                 LEFT JOIN act_re_auditprops
+                 ON l_viewproperties.properties= act_re_auditprops.prop_id_
+                and bill_id_=#{billID} and taskevent_name_=#{taskEventName}
+                and ACT_DEF_ID_=#{processID}
+                where B_PROPERTIES.NAME = '发货仓储地点'
+        ]]>
 	</select>
 
 </mapper>

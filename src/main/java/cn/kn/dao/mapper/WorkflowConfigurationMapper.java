@@ -10,23 +10,23 @@ public interface WorkflowConfigurationMapper {
 
     List<ProcessModel> getProcessModel();
 
-    List<ViewProp> getTaskEventName(Integer Rule, Integer Bill, String TaskEventNAME, String ViewName, String processId);
+    List<ViewProp> getTaskEventName(Integer ruleID, Integer billID, String taskEventName, String viewName, String processID);
 
-    List<Integer> getActReAuditView(String TaskEventNAME,Integer View,Integer Rule,Integer Bill,String processId);
+    List<Integer> getActReAuditView(String taskEventName,Integer viewID,Integer ruleID,Integer billID,String processID);
 
-    void deleteActReAuditView(Integer View,Integer Bill,String processId);
+    void deleteActReAuditView(Integer viewID,Integer billID,String processID);
 
-    List<Integer> getActReAuditProps(String TaskEventNAME,Integer View,Integer Bill,String processId);
+    List<Integer> getActReAuditProps(String taskEventName,Integer viewID,Integer billID,String processID);
 
-    void deleteActReAuditProps(Integer View,Integer Bill,String processId);
+    void deleteActReAuditProps(Integer viewID,Integer billID,String processID);
 
-    Integer insertActReAuditView(String ViewName,Integer View,Integer Rule,Integer Bill,String processId);
+    Integer insertActReAuditView(String viewName,Integer viewID,Integer ruleID,Integer billID,String processID);
 
-    List<AuditProps> getAuditProps(Integer View, Integer Bill, String TaskEventNAME,String processId);
+    List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName,String processID);
 
     //插入对应的属性操作权限
-    Integer insertActReAuditPropsStorageView(String ViewName,Integer Bill,Integer View,Integer propId,Integer IsNotNull,String processId);
+    Integer insertActReAuditPropsStorageView(String viewName,Integer billID,Integer viewID,Integer propID,Integer isNotNull,String processID);
 
     //单独处理一条MRP的，这是仓储视图里面的，就配置一条字段
-    AuditProps getAuditPropsMRP(Integer View,Integer Bill,String TaskEventNAME,String processId);
+    AuditProps getAuditPropsMRP(Integer viewID,Integer billID,String taskEventName,String processID);
 }

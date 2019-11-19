@@ -3,80 +3,80 @@ package cn.kn.dao.entity;
 import java.io.Serializable;
 
 abstract class BaseEntity implements Serializable {
-    private String Code;
-    private String Value;
-    private String Name;
-    private Integer View;
-    private Integer Bill;
-    private Integer Rule;
-    private Integer Task;
+    private String code;
+    private String value;
+    private String name;
+    private Integer viewID;
+    private Integer billID;
+    private Integer ruleID;
+    private Integer taskID;
 
     @Override
     public String toString() {
         return "BaseEntity{" +
-                "Code='" + Code + '\'' +
-                ", Value='" + Value + '\'' +
-                ", Name='" + Name + '\'' +
-                ", View=" + View +
-                ", Bill=" + Bill +
-                ", Rule=" + Rule +
-                ", Task=" + Task +
+                "code='" + code + '\'' +
+                ", value='" + value + '\'' +
+                ", name='" + name + '\'' +
+                ", viewID=" + viewID +
+                ", billID=" + billID +
+                ", ruleID=" + ruleID +
+                ", taskID=" + taskID +
                 '}';
     }
 
     public String getCode() {
-        return Code;
+        return code;
     }
 
     public void setCode(String code) {
-        Code = code;
+        this.code = code;
     }
 
     public String getValue() {
-        return Value;
+        return value;
     }
 
     public void setValue(String value) {
-        Value = value;
+        this.value = value;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
-    public Integer getView() {
-        return View;
+    public Integer getViewID() {
+        return viewID;
     }
 
-    public void setView(Integer view) {
-        View = view;
+    public void setViewID(Integer viewID) {
+        this.viewID = viewID;
     }
 
-    public Integer getBill() {
-        return Bill;
+    public Integer getBillID() {
+        return billID;
     }
 
-    public void setBill(Integer bill) {
-        Bill = bill;
+    public void setBillID(Integer billID) {
+        this.billID = billID;
     }
 
-    public Integer getRule() {
-        return Rule;
+    public Integer getRuleID() {
+        return ruleID;
     }
 
-    public void setRule(Integer rule) {
-        Rule = rule;
+    public void setRuleID(Integer ruleID) {
+        this.ruleID = ruleID;
     }
 
-    public Integer getTask() {
-        return Task;
+    public Integer getTaskID() {
+        return taskID;
     }
 
-    public void setTask(Integer task) {
-        Task = task;
+    public void setTaskID(Integer taskID) {
+        this.taskID = taskID;
     }
 }

@@ -51,7 +51,7 @@ public class WorkflowConfigurationService {
         for (ProcessModel processModel : processModels) {
             int viewId = 0;
             int bill = processModel.getId();
-            int rule = processModel.getRule();
+            int rule = processModel.getRuleID();
 
             //第三步:每个单据要配置三个工厂,循环三个工厂
             for (String s : factory) {
@@ -72,8 +72,8 @@ public class WorkflowConfigurationService {
 
                 //第八步:插入属性,因为对应的视图属性不同所以需要单独进行判断
                 if ((factoryCode + "工厂一般存储视图").equals(viewName)) {//5
-                    auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                     try {
+                        auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                         if (auditProps.size() != 5) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
@@ -91,8 +91,8 @@ public class WorkflowConfigurationService {
                 }
 
                 if ((factoryCode + mrpView).equals(viewName)) {//35
-                    auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                     try {
+                        auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                         if (auditProps.size() != 35) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
@@ -118,24 +118,21 @@ public class WorkflowConfigurationService {
                 }
 
                 if ((factoryCode + "仓储视图").equals(viewName)) {//2
-                    auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                     try {
+                        auditProps = wcm.getAuditProps(viewId, bill, viewName, processId);
                         if (auditProps.size() != 2) {
                             throw new CustomException(ResultEnum.QuantityError);
                         }
                         for (AuditProps auditProp : auditProps) {
                             wcm.insertActReAuditPropsStorageView(viewName, bill, viewId, auditProp.getPropId(), 0, processId);
                         }
-                    } catch (Exception e) {
-                        logger.error(ResultEnum.QuantityError.getMsg());
-                    }
-                    try {
                         auditProps1 = wcm.getAuditPropsMRP(mrpViewId, bill, viewName, processId);//1
                         wcm.insertActReAuditPropsStorageView(viewName, bill, mrpViewId, auditProps1.getPropId(), 0, processId);
                     } catch (Exception e) {
-                        logger.error("空指针异常");
+                        logger.error(ResultEnum.QuantityError.getMsg());
                     }
                 }
+
             }
         }
         logger.info("程序运行完毕!");
@@ -148,10 +145,10 @@ public class WorkflowConfigurationService {
             if (viewProp.isEmpty()) {
                 return 1;
             }
-            int viewId = viewProp.get(0).getView();
-            int ruleId = viewProp.get(0).getRule();
+            int viewId = viewProp.get(0).getViewID();
+            int ruleId = viewProp.get(0).getRuleID();
             if (viewName.equals((factoryCode + mrpView))) {
-                mrpViewId = viewProp.get(0).getView();
+                mrpViewId = viewProp.get(0).getViewID();
             }
             //第六步:流程视图表ActReAuditView,先查是否存在。存在循环删，不存在直接插入
             List<Integer> viewCount;
