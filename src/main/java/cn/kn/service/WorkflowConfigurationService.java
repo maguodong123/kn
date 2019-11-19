@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 扩充工厂口配置单据流程的程序。
+ * 第一个版本是把2260个单据全部刷上权限:已实现
+ * 第二个版本是完成流程后传送接口:已实现
+ * 最后一个版本解决多视图的问题:待议
+ */
 @RestController
 public class WorkflowConfigurationService {
 
@@ -25,12 +31,12 @@ public class WorkflowConfigurationService {
 
     private final Logger logger = LoggerFactory.getLogger(WorkflowConfigurationService.class);
     private int mrpViewId;
-    private String factoryCode = "2490工厂-";
-    private String processId = "正式-2490工厂流程:1:46681776";
+    private String factoryCode = "2790工厂-";
+    private String processId = "正式-2790工厂流程:2:48168447";
     private String mrpView = "MRP视图";
 
     @GetMapping(value = "workflowConfiguration")
-    public void workflowConfiguration() {//138404  ==>13万条SQL，5小时左右
+    public void workflowConfiguration() {//138404  ==>14万条SQL，6小时左右
         logger.info("流程配置程序开始运行!");
         List<AuditProps> auditProps;
         AuditProps auditProps1;
@@ -132,10 +138,26 @@ public class WorkflowConfigurationService {
                         logger.error(ResultEnum.QuantityError.getMsg());
                     }
                 }
-
+                insertFaceTaskEvent(viewName, bill);
             }
         }
         logger.info("程序运行完毕!");
+    }
+
+    private void insertFaceTaskEvent(String viewName, Integer bill) {
+        try {
+            if (viewName.equals("2790工厂-MRP视图")) {
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 342);
+            }
+            if (viewName.equals("2790工厂-仓储视图")) {
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 343);
+            }
+            if (viewName.equals("2790工厂-工厂一般存储视图")) {
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 344);
+            }
+        } catch (Exception e) {
+            logger.error(ResultEnum.InsertError.getMsg());
+        }
     }
 
     private Integer processingView(Integer rule, Integer bill, String viewName, String dataViewName) {
