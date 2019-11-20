@@ -146,13 +146,13 @@ public class WorkflowConfigurationService {
     private void insertFaceTaskEvent(String viewName, Integer bill) {
         try {
             if (viewName.equals("2790工厂-MRP视图")) {
-                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 342);
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 382);
             }
             if (viewName.equals("2790工厂-仓储视图")) {
-                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 343);
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 363);
             }
             if (viewName.equals("2790工厂-工厂一般存储视图")) {
-                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 344);
+                wcm.insertActReAuditInterFaceTaskEvent(processId, bill, viewName, 362);
             }
         } catch (Exception e) {
             logger.error(ResultEnum.InsertError.getMsg());

@@ -1,8 +1,6 @@
 package cn.kn.dao.mapper;
 
-import cn.kn.dao.entity.AuditProps;
-import cn.kn.dao.entity.ProcessModel;
-import cn.kn.dao.entity.ViewProp;
+import cn.kn.dao.entity.*;
 
 import java.util.List;
 
@@ -33,4 +31,22 @@ public interface WorkflowConfigurationMapper {
     //这张表主要是配置流程视图与接口的对接配置
     void insertActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName, Integer interfaceID);
 
+    //插入更新规范,2790扩充工厂临时加了一张mrp视图
+    void insertSpecification(String sql);
+
+
+    Integer selectSpecification(Integer ruleID,Integer viewID);
+
+    void deleteSpecification(Integer ruleID,Integer viewID);
+
+    //获取所有已经启用得模型id
+    List<DataRule> getDataRule();
+
+    //根据单据视图名获取视图id
+    List<Integer> getViewID(String viewName);
+
+    //根据一系例得条件获得该视图得判断条件
+    Integer getAuditViewIsHeck(Integer viewID, Integer ruleID, Integer billID);
+
+    Bill getBill(Integer ruleID,String ruleName);
 }

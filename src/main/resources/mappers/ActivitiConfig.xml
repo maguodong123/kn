@@ -20,6 +20,20 @@
         <result column="ID_" property="ID"/>
     </resultMap>
 
+    <resultMap id="BillMap" type="cn.kn.dao.entity.Bill">
+        <result column="NAME" property="billName"/>
+        <result column="F_ENABLE" property="enable"/>
+        <result column="id" property="billID"/>
+        <result column="SV" property="version"/>
+        <result column="F_DATARULE" property="billID"/>
+    </resultMap>
+
+    <resultMap id="RuleMap" type="cn.kn.dao.entity.DataRule">
+        <result column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="F_ENABLE" property="enable"/>
+    </resultMap>
+
     <select id="getProcessModel" resultMap="ProcessModelMap">
 		<![CDATA[select ID,SV,NAME,F_ENABLE,F_DATARULE
                  FROM (
@@ -107,6 +121,39 @@
         <![CDATA[insert into act_re_auditinterfacetaskevent values
         ('1',#{processID},#{billID},#{taskEventName},#{interfaceID})]]>
     </insert>
+
+    <insert id="insertSpecification">
+        <!--<![CDATA[insert into B_STANDARDVERSION  values
+        (1,#{version}, STANDARDS(#{viewID}),#{ruleID},#{viewID},1)]]>-->
+        ${sql}
+    </insert>
+
+    <select id="getDataRule" resultMap="RuleMap">
+        <![CDATA[select * from B_DATARULE where F_ENABLE=1]]>
+    </select>
+    
+    <select id="getBill" resultMap="BillMap">
+        <![CDATA[select * from B_BILL where F_DATARULE=#{ruleID} and NAME=#{ruleName}]]>
+    </select>
+
+    <select id="getViewID" resultType="java.lang.Integer">
+        <![CDATA[select * from B_DATAVIEW where NAME =#{viewName}]]>
+    </select>
+
+    <select id="getAuditViewIsHeck" resultType="java.lang.Integer">
+        <![CDATA[select ISCHECK_ from ACT_RE_AUDITVIEW where TASKEVENT_NAME_='2790工厂-MRP工艺'
+        and VIEW_ID_= #{viewID} and RULE_ID_= #{ruleID}
+        and BILL_ID_= #{billID} and ACT_DEF_ID_='正式-2790工厂流程:2:48168447']]>
+    </select>
+
+    <select id="selectSpecification" resultType="java.lang.Integer">
+        <![CDATA[select count(*) from B_STANDARDVERSION where F_DATARULE=#{ruleID} and F_DATAVIEW=#{viewID}]]>
+    </select>
+
+    <delete id="deleteSpecification">
+        <![CDATA[delete from B_STANDARDVERSION where F_DATARULE=#{ruleID} and F_DATAVIEW=#{viewID}]]>
+    </delete>
+
 
 </mapper>
 
