@@ -2,9 +2,9 @@ package cn.kn.dao.excel;
 
 import java.io.Serializable;
 
-abstract class ExcelMap implements Serializable {
+public abstract class ExcelMap implements Serializable {
     private Integer key;
-    private String value;
+    private Integer value;
     private String factory;
     private String code;
     private String viewName;
@@ -28,11 +28,11 @@ abstract class ExcelMap implements Serializable {
         this.key = key;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

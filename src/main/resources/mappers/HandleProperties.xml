@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kn.dao.mapper.HandlePropertiesMapper">
+    <resultMap id="TaskPropertiesMap" type="cn.kn.dao.entity.table.TaskProperties">
+        <result column="ID" property="taskPropertiesID"/>
+        <result column="TASKBILL" property="taskBill"/>
+        <result column="PROPERTIES" property="properties"/>
+        <result column="PROPVALUE" property="propValue"/>
+        <result column="PROPGROUP" property="propGroup"/>
+        <result column="BASEDATANAME" property="baseDataName"/>
+    </resultMap>
+    <resultMap id="CodePropTypeMap" type="cn.kn.dao.entity.table.CodePropType">
+        <result column="ID" property="codePropTypeID"/>
+        <result column="PROP" property="prop"/>
+        <result column="VALUE" property="value"/>
+        <result column="MDL" property="codeID"/>
+        <result column="TASKPROP" property="taskProp"/>
+    </resultMap>
+
+    <select id="getTaskPropertiesList" resultMap="TaskPropertiesMap">
+        <![CDATA[select * FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+    </select>
+
+    <select id="getTaskPropertiesID" resultType="java.lang.Integer">
+        <![CDATA[select id FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+    </select>
+
+    <select id="getCodePropTypeList" resultMap="CodePropTypeMap">
+        <![CDATA[select * from Mdm_Proptype where TASKPROP=#{taskPropID}]]>
+    </select>
+
+    <select id="getCodePropTypeID" resultType="java.lang.Integer">
+        <![CDATA[select id from Mdm_Proptype where TASKPROP=#{taskPropID}]]>
+    </select>
+
+    <delete id="deleteTaskProperties">
+        <![CDATA[delete from B_TASKPROPERTIES where id = #{taskPropertiesID}]]>
+    </delete>
+    
+    <delete id="deleteCodePropType">
+        <![CDATA[delete from Mdm_Proptype where TASKPROP = #{taskPropertiesID}]]>
+    </delete>
+
+
+</mapper>
