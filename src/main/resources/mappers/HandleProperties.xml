@@ -43,5 +43,15 @@
         <![CDATA[delete from Mdm_Proptype where TASKPROP = #{taskPropertiesID}]]>
     </delete>
 
+    <select id="getRelationalQueryTaskPropertiesID" resultType="java.lang.Integer">
+        <![CDATA[SELECT b_taskproperties.ID FROM b_taskproperties
+        JOIN b_properties ON b_taskproperties.properties=b_properties.id
+        JOIN L_Viewproperties ON b_properties.id=l_viewproperties.properties
+        JOIN b_dataview ON b_dataview.id=l_viewproperties.dataview
+        JOIN mdm_datalibray ON mdm_datalibray.task=b_taskproperties.taskbill
+        WHERE b_taskproperties.taskbill=#{taskBill}
+         and B_DATAVIEW.NAME=#{dataName}
+         and MDM_DATALIBRAY.CODE=#{code}]]>
+    </select>
 
 </mapper>

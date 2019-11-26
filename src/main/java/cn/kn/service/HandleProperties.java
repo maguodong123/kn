@@ -1,6 +1,7 @@
 package cn.kn.service;
 
 import cn.kn.dao.excel.ExcelMDM;
+import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.mapper.HandlePropertiesMapper;
 import cn.kn.utility.excel.ReadExcel;
 import cn.kn.utility.exceptionhandling.ResultEnum;
@@ -21,6 +22,7 @@ import java.util.List;
 public class HandleProperties {
     private HandlePropertiesMapper hpm;
     private final Logger logger = LoggerFactory.getLogger(HandleProperties.class);
+
     public HandleProperties(HandlePropertiesMapper hpm) {
         this.hpm = hpm;
     }
@@ -28,16 +30,24 @@ public class HandleProperties {
     @GetMapping(value = "handleProperties")
     public void handleProperties() throws IOException {
         ReadExcel readExcel = new ReadExcel();
-        List<ExcelMDM> excelMDMS = readExcel.readExcelMap();
-        for (ExcelMDM excelMDM:excelMDMS){
-            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
+        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
+        for (ExcelSAP sap : excelSAPS) {
+            List<Integer> integers = hpm.getRelationalQueryTaskPropertiesID(sap.getTaskBill(),sap.getDataName(),sap.getCode());
+            for (int i=0;i<integers.size();i++){
+                deleteTaskAndCodeID(integers.get(i));
+            }
         }
+
+
+//        List<ExcelMDM> excelMDMS = readExcel.readExcelMap();
+//        for (ExcelMDM excelMDM:excelMDMS){
+//            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
+//        }
     }
 
-    //同时删除任务单表和属性表的方法
-    private void deleteTaskAndCode(Integer properties,Integer taskBill){
+    //只需要ID作为条件即可
+    private void deleteTaskAndCodeID(Integer taskPropertiesID){
         try {
-            Integer taskPropertiesID = hpm.getTaskPropertiesID(properties,taskBill);
             hpm.deleteCodePropType(taskPropertiesID);
             hpm.deleteTaskProperties(taskPropertiesID);
         } catch (Exception e) {
@@ -45,6 +55,16 @@ public class HandleProperties {
         }
     }
 
+    //同时删除任务单表和属性表的方法
+    private void deleteTaskAndCode(Integer properties, Integer taskBill) {
+        try {
+            Integer taskPropertiesID = hpm.getTaskPropertiesID(properties, taskBill);
+            hpm.deleteCodePropType(taskPropertiesID);
+            hpm.deleteTaskProperties(taskPropertiesID);
+        } catch (Exception e) {
+            logger.info(ResultEnum.DeleteError.getMsg());
+        }
+    }
 
 
 }

@@ -17,8 +17,10 @@ public interface HandlePropertiesMapper {
     Integer getCodePropTypeID(Integer taskPropertiesID);
     //单条删除任务单属性表全部
     void deleteTaskProperties(Integer taskPropertiesID);
-    //单条删除编码属性表全部
+    //单条删除编码属性表全部d
     void deleteCodePropType(Integer taskPropertiesID);
+    //根据三个精确条件关联查询出相对任务单的ID
+    List<Integer> getRelationalQueryTaskPropertiesID(Integer taskBill,String dataName,String code);
 
 
 

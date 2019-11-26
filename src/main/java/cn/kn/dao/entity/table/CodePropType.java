@@ -1,7 +1,7 @@
 package cn.kn.dao.entity.table;
 
 import java.io.Serializable;
-
+//对应Mdm_Proptype这张表
 public class CodePropType implements Serializable {
     private Integer codePropTypeID;
     private Integer prop;

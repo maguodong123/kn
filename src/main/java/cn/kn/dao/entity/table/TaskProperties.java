@@ -1,7 +1,7 @@
 package cn.kn.dao.entity.table;
 
 import java.io.Serializable;
-
+//对应B_Taskproperties这张表
 public class TaskProperties implements Serializable {
     private Integer taskPropertiesID;
     private Integer taskBill;
