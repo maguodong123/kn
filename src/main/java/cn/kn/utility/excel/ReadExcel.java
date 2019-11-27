@@ -2,6 +2,7 @@ package cn.kn.utility.excel;
 
 import cn.kn.dao.excel.ExcelMDM;
 import cn.kn.dao.excel.ExcelSAP;
+import cn.kn.dao.excel.ExcelValue;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -20,6 +21,28 @@ public class ReadExcel {
 
     public ReadExcel() throws IOException {
     }
+
+    public List<ExcelValue> readExcelValue() throws IOException {
+        DataFormatter formatter = new DataFormatter();
+        List<ExcelValue> list = new ArrayList<>();
+        for (int i = 0; i <= lastRowIndex; i++) {
+            HSSFRow row = sheet.getRow(i);
+            if (row == null) {
+                break;
+            }
+            ExcelValue excelValue = new ExcelValue();
+            short lastCellNum = row.getLastCellNum();
+            for (int j = 0; j < lastCellNum; j++) {
+                excelValue.setTaskBill((int) row.getCell(0).getNumericCellValue());
+                excelValue.setProperties((int) row.getCell(1).getNumericCellValue());
+                excelValue.setValue(formatter.formatCellValue(row.getCell(2)));
+                break;
+            }
+            list.add(i, excelValue);
+        }
+        return list;
+    }
+
 
     public List<ExcelSAP> readExcelSAP() throws IOException {
         DataFormatter formatter = new DataFormatter();

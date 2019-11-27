@@ -2,6 +2,7 @@ package cn.kn.service;
 
 import cn.kn.dao.excel.ExcelMDM;
 import cn.kn.dao.excel.ExcelSAP;
+import cn.kn.dao.excel.ExcelValue;
 import cn.kn.dao.mapper.HandlePropertiesMapper;
 import cn.kn.utility.excel.ReadExcel;
 import cn.kn.utility.exceptionhandling.ResultEnum;
@@ -30,23 +31,38 @@ public class HandleProperties {
     @GetMapping(value = "handleProperties")
     public void handleProperties() throws IOException {
         ReadExcel readExcel = new ReadExcel();
-        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
-        for (ExcelSAP sap : excelSAPS) {
-            List<Integer> integers = hpm.getRelationalQueryTaskPropertiesID(sap.getTaskBill(),sap.getDataName(),sap.getCode());
-            for (int i=0;i<integers.size();i++){
-                deleteTaskAndCodeID(integers.get(i));
-            }
+        List<ExcelValue> excelValues = readExcel.readExcelValue();
+        for (ExcelValue value:excelValues){
+            setTaskAndCode(value.getValue(),value.getProperties(),value.getTaskBill());
         }
-
-
+        //这是根据那个很长的关联查询批量删除视图的
+//        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
+//        for (ExcelSAP sap : excelSAPS) {
+//            List<Integer> integers = hpm.getRelationalQueryTaskPropertiesID(sap.getTaskBill(),sap.getDataName(),sap.getCode());
+//            for (int i=0;i<integers.size();i++){
+//                deleteTaskAndCodeID(integers.get(i));
+//            }
+//        }
 //        List<ExcelMDM> excelMDMS = readExcel.readExcelMap();
 //        for (ExcelMDM excelMDM:excelMDMS){
 //            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
 //        }
     }
 
-    //只需要ID作为条件即可
-    private void deleteTaskAndCodeID(Integer taskPropertiesID){
+
+    //修改属性值,传三个条件修改的值,属性id,任务单id
+    private void setTaskAndCode(String value, Integer properties, Integer taskBill) {
+        try {
+            Integer taskPropertiesID = hpm.getTaskPropertiesID(properties, taskBill);
+            hpm.updateTaskProperties(value, properties, taskBill);
+            hpm.updateCodePropType(value, properties, taskPropertiesID);
+        } catch (Exception e) {
+            logger.info(ResultEnum.UpdateError.getMsg());
+        }
+    }
+
+    //删两张表,只需要ID作为条件即可
+    private void deleteTaskAndCodeID(Integer taskPropertiesID) {
         try {
             hpm.deleteCodePropType(taskPropertiesID);
             hpm.deleteTaskProperties(taskPropertiesID);

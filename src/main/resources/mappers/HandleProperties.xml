@@ -54,4 +54,12 @@
          and MDM_DATALIBRAY.CODE=#{code}]]>
     </select>
 
+    <update id="updateTaskProperties">
+        <![CDATA[update B_Taskproperties set PROPVALUE=#{value} where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+    </update>
+    
+    <update id="updateCodePropType">
+       <![CDATA[update Mdm_Proptype set VALUE =#{value} where PROP = #{prop} and TASKPROP=#{taskProp}]]>
+    </update>
+
 </mapper>

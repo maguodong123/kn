@@ -21,7 +21,9 @@ public interface HandlePropertiesMapper {
     void deleteCodePropType(Integer taskPropertiesID);
     //根据三个精确条件关联查询出相对任务单的ID
     List<Integer> getRelationalQueryTaskPropertiesID(Integer taskBill,String dataName,String code);
-
-
+    //修改任务单属性表value
+    void updateTaskProperties(String value, Integer properties, Integer taskBill);
+    //修改编码属性表value
+    void updateCodePropType(String value, Integer prop, Integer taskProp);
 
 }
