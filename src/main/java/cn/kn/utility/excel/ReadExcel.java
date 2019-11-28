@@ -1,5 +1,6 @@
 package cn.kn.utility.excel;
 
+import cn.kn.dao.excel.ExcelCode;
 import cn.kn.dao.excel.ExcelMDM;
 import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.excel.ExcelValue;
@@ -66,18 +67,19 @@ public class ReadExcel {
     }
 
 
-    public List<ExcelMDM> readExcelMap() throws IOException {
-        List<ExcelMDM> list = new ArrayList<>();
+    public List<ExcelCode> readExcelMap() throws IOException {
+        List<ExcelCode> list = new ArrayList<>();
+        DataFormatter formatter = new DataFormatter();
         for (int i = 0; i <= lastRowIndex; i++) {
             HSSFRow row = sheet.getRow(i);
             if (row == null) {
                 break;
             }
-            ExcelMDM excelMap = new ExcelMDM();
+            ExcelCode excelMap = new ExcelCode();
             short lastCellNum = row.getLastCellNum();
             for (int j = 0; j < lastCellNum; j++) {
-                excelMap.setKey((int) row.getCell(0).getNumericCellValue());
-                excelMap.setValue((int) row.getCell(1).getNumericCellValue());
+                excelMap.setCode(formatter.formatCellValue(row.getCell(0)));
+                excelMap.setOldCode(formatter.formatCellValue(row.getCell(1)));
                 break;
             }
             list.add(i, excelMap);

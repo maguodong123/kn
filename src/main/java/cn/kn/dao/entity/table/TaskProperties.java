@@ -1,7 +1,7 @@
 package cn.kn.dao.entity.table;
 
 import java.io.Serializable;
-//对应B_Taskproperties这张表
+//对应B_Taskproperties这张表，顺便加上了两个关联的字段.这是哪个很常用的SQL关联查出来的
 public class TaskProperties implements Serializable {
     private Integer taskPropertiesID;
     private Integer taskBill;
@@ -9,6 +9,8 @@ public class TaskProperties implements Serializable {
     private String propValue;
     private Integer propGroup;
     private String baseDataName;
+    private String propertiesName;
+    private String dataViewName;
 
     @Override
     public String toString() {
@@ -19,6 +21,8 @@ public class TaskProperties implements Serializable {
                 ", propValue='" + propValue + '\'' +
                 ", propGroup=" + propGroup +
                 ", baseDataName='" + baseDataName + '\'' +
+                ", propertiesName='" + propertiesName + '\'' +
+                ", dataViewName='" + dataViewName + '\'' +
                 '}';
     }
 
@@ -68,5 +72,21 @@ public class TaskProperties implements Serializable {
 
     public void setBaseDataName(String baseDataName) {
         this.baseDataName = baseDataName;
+    }
+
+    public String getPropertiesName() {
+        return propertiesName;
+    }
+
+    public void setPropertiesName(String propertiesName) {
+        this.propertiesName = propertiesName;
+    }
+
+    public String getDataViewName() {
+        return dataViewName;
+    }
+
+    public void setDataViewName(String dataViewName) {
+        this.dataViewName = dataViewName;
     }
 }

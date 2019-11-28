@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kn.dao.mapper.CleaningMapper">
+
+    <resultMap id="TaskPropertiesMap" type="cn.kn.dao.entity.table.TaskProperties">
+        <result column="ID" property="taskPropertiesID"/>
+        <result column="TASKBILL" property="taskBill"/>
+        <result column="PROPERTIES" property="properties"/>
+        <result column="PROPVALUE" property="propValue"/>
+        <result column="PROPGROUP" property="propGroup"/>
+        <result column="BASEDATANAME" property="baseDataName"/>
+        <result column="PROPNAME" property="propertiesName"/>
+        <result column="DATAVIEWNAME" property="dataViewName"/>
+    </resultMap>
+
+    <select id="getCodeDataLibraryTask" resultType="java.lang.Integer">
+        <![CDATA[select TASK from MDM_DATALIBRAY where CODE=#{code}]]>
+    </select>
+
+    <select id="getMDMDataLibraryID" resultType="java.lang.Integer">
+        <![CDATA[select id from MDM_DATALIBRAY where CODE=#{code}]]>
+    </select>
+
+    <select id="getTaskPropertiesList" resultMap="TaskPropertiesMap">
+        <![CDATA[SELECT b_taskproperties.*,b_properties.name propname,b_dataview.name dataviewname FROM
+        b_taskproperties JOIN b_properties ON
+        b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
+        b_properties.id=l_viewproperties.properties JOIN b_dataview ON
+        b_dataview.id=l_viewproperties.dataview JOIN mdm_datalibray ON
+        mdm_datalibray.task=b_taskproperties.taskbill
+        WHERE b_taskproperties.taskbill=#{task}	and b_properties.NAME=#{propertiesName}]]>
+    </select>
+
+    <update id="setOldCode">
+        <![CDATA[update b_oldcode set MDL=#{codeID} where CODE=#{oldCode}]]>
+    </update>
+
+    <update id="setCodeCorrelation">
+        <![CDATA[update L_OLDCODE2LIB set F_MD=#{codeID} where F_OLDCODE=#{oldCode}]]>
+    </update>
+
+</mapper>

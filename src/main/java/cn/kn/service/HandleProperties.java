@@ -1,7 +1,5 @@
 package cn.kn.service;
 
-import cn.kn.dao.excel.ExcelMDM;
-import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.excel.ExcelValue;
 import cn.kn.dao.mapper.HandlePropertiesMapper;
 import cn.kn.utility.excel.ReadExcel;
@@ -21,19 +19,20 @@ import java.util.List;
  */
 @RestController
 public class HandleProperties {
-    private HandlePropertiesMapper hpm;
+    private static HandlePropertiesMapper handlePropertiesMapper;
     private final Logger logger = LoggerFactory.getLogger(HandleProperties.class);
 
-    public HandleProperties(HandlePropertiesMapper hpm) {
-        this.hpm = hpm;
+    public HandleProperties(HandlePropertiesMapper handlePropertiesMapper) {
+        this.handlePropertiesMapper = handlePropertiesMapper;
     }
+
 
     @GetMapping(value = "handleProperties")
     public void handleProperties() throws IOException {
         ReadExcel readExcel = new ReadExcel();
         List<ExcelValue> excelValues = readExcel.readExcelValue();
-        for (ExcelValue value:excelValues){
-            setTaskAndCode(value.getValue(),value.getProperties(),value.getTaskBill());
+        for (ExcelValue value : excelValues) {
+            setTaskAndCode(value.getValue(), value.getProperties(), value.getTaskBill());
         }
         //这是根据那个很长的关联查询批量删除视图的
 //        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
@@ -51,21 +50,21 @@ public class HandleProperties {
 
 
     //修改属性值,传三个条件修改的值,属性id,任务单id
-    private void setTaskAndCode(String value, Integer properties, Integer taskBill) {
+    static void setTaskAndCode(String value, Integer properties, Integer taskBill) {
         try {
-            Integer taskPropertiesID = hpm.getTaskPropertiesID(properties, taskBill);
-            hpm.updateTaskProperties(value, properties, taskBill);
-            hpm.updateCodePropType(value, properties, taskPropertiesID);
+            Integer taskPropertiesID = handlePropertiesMapper.getTaskPropertiesID(properties, taskBill);
+            handlePropertiesMapper.updateTaskProperties(value, properties, taskBill);
+            handlePropertiesMapper.updateCodePropType(value, properties, taskPropertiesID);
         } catch (Exception e) {
-            logger.info(ResultEnum.UpdateError.getMsg());
+            e.toString();
         }
     }
 
     //删两张表,只需要ID作为条件即可
     private void deleteTaskAndCodeID(Integer taskPropertiesID) {
         try {
-            hpm.deleteCodePropType(taskPropertiesID);
-            hpm.deleteTaskProperties(taskPropertiesID);
+            handlePropertiesMapper.deleteCodePropType(taskPropertiesID);
+            handlePropertiesMapper.deleteTaskProperties(taskPropertiesID);
         } catch (Exception e) {
             logger.info(ResultEnum.DeleteError.getMsg());
         }
@@ -74,9 +73,9 @@ public class HandleProperties {
     //同时删除任务单表和属性表的方法
     private void deleteTaskAndCode(Integer properties, Integer taskBill) {
         try {
-            Integer taskPropertiesID = hpm.getTaskPropertiesID(properties, taskBill);
-            hpm.deleteCodePropType(taskPropertiesID);
-            hpm.deleteTaskProperties(taskPropertiesID);
+            Integer taskPropertiesID = handlePropertiesMapper.getTaskPropertiesID(properties, taskBill);
+            handlePropertiesMapper.deleteCodePropType(taskPropertiesID);
+            handlePropertiesMapper.deleteTaskProperties(taskPropertiesID);
         } catch (Exception e) {
             logger.info(ResultEnum.DeleteError.getMsg());
         }
