@@ -32,7 +32,7 @@ public class HandleProperties {
         ReadExcel readExcel = new ReadExcel();
         List<ExcelValue> excelValues = readExcel.readExcelValue();
         for (ExcelValue value : excelValues) {
-            setTaskAndCode(value.getValue(), value.getProperties(), value.getTaskBill());
+            setTaskAndCode(value.getValue(), Integer.parseInt(value.getProperties()), Integer.parseInt(value.getTaskBill()));
         }
         //这是根据那个很长的关联查询批量删除视图的
 //        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();

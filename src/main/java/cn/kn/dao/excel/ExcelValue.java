@@ -3,8 +3,8 @@ package cn.kn.dao.excel;
 import java.io.Serializable;
 
 public class ExcelValue implements Serializable {
-    private Integer taskBill;
-    private Integer properties;
+    private String taskBill;
+    private String properties;
     private String value;
 
     @Override
@@ -16,19 +16,19 @@ public class ExcelValue implements Serializable {
                 '}';
     }
 
-    public Integer getTaskBill() {
+    public String getTaskBill() {
         return taskBill;
     }
 
-    public void setTaskBill(Integer taskBill) {
+    public void setTaskBill(String taskBill) {
         this.taskBill = taskBill;
     }
 
-    public Integer getProperties() {
+    public String getProperties() {
         return properties;
     }
 
-    public void setProperties(Integer properties) {
+    public void setProperties(String properties) {
         this.properties = properties;
     }
 

@@ -1,7 +1,6 @@
 package cn.kn.utility.excel;
 
 import cn.kn.dao.excel.ExcelCode;
-import cn.kn.dao.excel.ExcelMDM;
 import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.excel.ExcelValue;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -34,9 +33,9 @@ public class ReadExcel {
             ExcelValue excelValue = new ExcelValue();
             short lastCellNum = row.getLastCellNum();
             for (int j = 0; j < lastCellNum; j++) {
-                excelValue.setTaskBill((int) row.getCell(0).getNumericCellValue());
-                excelValue.setProperties((int) row.getCell(1).getNumericCellValue());
-                excelValue.setValue(formatter.formatCellValue(row.getCell(2)));
+                excelValue.setValue(formatter.formatCellValue(row.getCell(0)));
+                excelValue.setProperties(formatter.formatCellValue(row.getCell(1)));
+                excelValue.setTaskBill(formatter.formatCellValue(row.getCell(2)));
                 break;
             }
             list.add(i, excelValue);
