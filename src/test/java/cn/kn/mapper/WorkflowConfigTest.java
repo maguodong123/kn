@@ -18,7 +18,7 @@ public class WorkflowConfigTest {
 
     @Test
     public void getProcessModel(){
-        List<ProcessModel> processModels = wcm.getProcessModel();
+        List<ProcessModel> processModels = wcm.getProcessModel("正式物资编码流程");
     }
 
 

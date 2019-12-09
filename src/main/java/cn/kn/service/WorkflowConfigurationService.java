@@ -51,12 +51,12 @@ public class WorkflowConfigurationService {
         String dataViewName;
 
         //第一步:查询出要配置的流程模型下的所有单据
-        List<ProcessModel> processModels = wcm.getProcessModel();
+        List<ProcessModel> processModels = wcm.getProcessModel("正式物资编码流程");
 
         //第二步:循环所有单据,并循环对所有单据做出配置处理
         for (ProcessModel processModel : processModels) {
             int bill = processModel.getId();
-            int rule = processModel.getRuleID();
+            int rule = processModel.getDataRule();
 
             //第三步:每个单据要配置三个工厂,循环三个工厂
             for (String s : factory) {

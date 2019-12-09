@@ -6,7 +6,17 @@ import java.util.List;
 
 public interface WorkflowConfigurationMapper {
 
-    List<ProcessModel> getProcessModel();
+    //这是查询ACT_RE_MODEL这张表里面的所有流程,然后存储到一个集合中,传入查询的流程名字
+    List<ProcessModel> getProcessModel(String processName);
+
+    //获取MRP视图ID,条件就是NAME全名
+    Integer getDataViewMRP(String name);
+
+    //获取属性名称和属性ID
+    List<Properties> getProperties(Integer viewID, Integer billID, String taskEventName, String processID);
+
+    //删除流程属性,这次要查询的属性多一个
+    void deleteActReAuditPropsAndTaskEvent(String taskEventName, Integer viewID, Integer billID, Integer propID, String processID);
 
     List<ViewProp> getTaskEventName(Integer ruleID, Integer billID, String taskEventName, String viewName, String processID);
 
@@ -14,11 +24,18 @@ public interface WorkflowConfigurationMapper {
 
     void deleteActReAuditView(Integer viewID, Integer billID, String processID);
 
+    //删除流程视图,详细的属性查询
+    void deleteActReAuditViewOne(String taskEventName, Integer viewID, Integer billID, String processID);
+
     List<Integer> getActReAuditProps(String taskEventName, Integer viewID, Integer billID, String processID);
 
     void deleteActReAuditProps(Integer viewID, Integer billID, String processID);
 
+    //插入act_re_auditview表
     Integer insertActReAuditView(String viewName, Integer viewID, Integer ruleID, Integer billID, String processID);
+
+    //插入act_re_auditview表单独的申请人SQL
+    Integer insertActReAuditViewOne(String viewName, Integer viewID, Integer ruleID, Integer billID, Integer isNotNull, String processID);
 
     List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName, String processID);
 
@@ -34,18 +51,21 @@ public interface WorkflowConfigurationMapper {
     //插入更新规范,2790扩充工厂临时加了一张mrp视图
     void insertSpecification(String sql);
 
-    Integer selectSpecification(Integer ruleID,Integer viewID);
+    Integer selectSpecification(Integer ruleID, Integer viewID);
 
-    void deleteSpecification(Integer ruleID,Integer viewID);
+    void deleteSpecification(Integer ruleID, Integer viewID);
 
     //获取所有已经启用得模型id
     List<DataRule> getDataRule();
 
-    //根据单据视图名获取视图id
+    //根据单据视图名获取视图id集合
     List<Integer> getViewID(String viewName);
+
+    //根据单据视图名获取视图id单个
+    Integer getViewIDOne(String viewName);
 
     //根据一系例得条件获得该视图得判断条件
     Integer getAuditViewIsHeck(Integer viewID, Integer ruleID, Integer billID);
 
-    Bill getBill(Integer ruleID,String ruleName);
+    Bill getBill(Integer ruleID, String ruleName);
 }

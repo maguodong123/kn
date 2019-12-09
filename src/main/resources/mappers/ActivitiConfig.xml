@@ -6,10 +6,11 @@
 
     <resultMap id="ProcessModelMap"
                type="cn.kn.dao.entity.ProcessModel">
-        <result column="ID" property="Id"/>
-        <result column="SV" property="SV"/>
-        <result column="F_ENABLE" property="Enable"/>
-        <result column="F_DATARULE" property="ruleID"/>
+        <result column="ID" property="id"/>
+        <result column="SV" property="version"/>
+        <result column="F_ENABLE" property="enable"/>
+        <result column="F_DATARULE" property="dataRule"/>
+        <result column="NAME" property="name"/>
     </resultMap>
 
     <resultMap id="ViewPropMap"
@@ -39,7 +40,7 @@
                  FROM (
                  SELECT distinct(bl.id),bl.sv,bl.name,bl.f_enable,bl.f_datarule
                  FROM b_bill bl join b_task bk
-                 ON bk.res like ''||'正式物资编码流程'||'%' and bl.id=bk.bill join b_datarule
+                 ON bk.res like ''||#{processName}||'%' and bl.id=bk.bill join b_datarule
                  ON bl.f_datarule=b_datarule.id join l_category2bill cb
                  ON cb.f_bill=bl.id
                  WHERE 1=1)]]>
@@ -77,15 +78,34 @@
                 values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1','1',#{processID})]]>
 	</insert>
 
+    <insert id="insertActReAuditViewOne">
+        <![CDATA[insert into act_re_auditview
+        values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1',#{isNotNull},#{processID})]]>
+    </insert>
+
     <delete id="deleteActReAuditView">
 		<![CDATA[delete from act_re_auditview
                 where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
 	</delete>
 
+    <delete id="deleteActReAuditViewOne">
+		<![CDATA[delete from act_re_auditview
+                where taskevent_name_=#{taskEventName} and BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
+    </delete>
+
     <delete id="deleteActReAuditProps">
 		<![CDATA[delete from act_re_auditprops
                 where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
 	</delete>
+
+    <delete id="deleteActReAuditPropsAndTaskEvent">
+		<![CDATA[delete from act_re_auditprops
+                where  TASKEVENT_NAME_=#{taskEventName}
+                and BILL_ID_ = #{billID}
+                and VIEW_ID_ = #{viewID}
+                and PROP_ID_= #{propID}
+                and ACT_DEF_ID_=#{processID}]]>
+    </delete>
 
     <select id="getAuditProps" resultType="cn.kn.dao.entity.AuditProps">
 		<![CDATA[select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
@@ -139,6 +159,9 @@
     <select id="getViewID" resultType="java.lang.Integer">
         <![CDATA[select * from B_DATAVIEW where NAME =#{viewName}]]>
     </select>
+    <select id="getViewIDOne" resultType="java.lang.Integer">
+        <![CDATA[select id from B_DATAVIEW where NAME =#{viewName}]]>
+    </select>
 
     <select id="getAuditViewIsHeck" resultType="java.lang.Integer">
         <![CDATA[select ISCHECK_ from ACT_RE_AUDITVIEW where TASKEVENT_NAME_='2790工厂-MRP工艺'
@@ -153,6 +176,22 @@
     <delete id="deleteSpecification">
         <![CDATA[delete from B_STANDARDVERSION where F_DATARULE=#{ruleID} and F_DATAVIEW=#{viewID}]]>
     </delete>
+
+    <select id="getDataViewMRP" resultType="java.lang.Integer">
+        <![CDATA[select id from B_DATAVIEW where NAME=#{name}]]>
+    </select>
+    
+    <select id="getProperties" resultType="cn.kn.dao.entity.Properties">
+        <![CDATA[select b_properties.name propertiesName ,b_properties.id  propertiesID
+             FROM b_dataview join l_viewproperties
+             ON b_dataview.id=#{viewID} and b_dataview.id=l_viewproperties.dataview join b_properties
+             ON b_properties.id=l_viewproperties.properties
+             LEFT JOIN act_re_auditprops
+             ON l_viewproperties.properties= act_re_auditprops.prop_id_ and bill_id_=#{billID}
+            and taskevent_name_=#{taskEventName} and ACT_DEF_ID_=#{processID}]]>
+    </select>
+
+
 
 
 </mapper>

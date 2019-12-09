@@ -1,6 +1,4 @@
 package cn.kn.service;
-
-
 import cn.kn.dao.entity.PropertiesData;
 import cn.kn.dao.entity.SelectData;
 import cn.kn.dao.mapper.SelectDataMapper;
