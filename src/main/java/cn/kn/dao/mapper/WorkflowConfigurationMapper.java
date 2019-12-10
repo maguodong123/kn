@@ -24,6 +24,8 @@ public interface WorkflowConfigurationMapper {
 
     void deleteActReAuditView(Integer viewID, Integer billID, String processID);
 
+    void deleteActReAuditViewEvent(String taskEventName,Integer viewID, Integer billID, String processID);
+
     //删除流程视图,详细的属性查询
     void deleteActReAuditViewOne(String taskEventName, Integer viewID, Integer billID, String processID);
 
@@ -40,13 +42,19 @@ public interface WorkflowConfigurationMapper {
     List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName, String processID);
 
     //插入对应的属性操作权限
-    Integer insertActReAuditPropsStorageView(String viewName, Integer billID, Integer viewID, Integer propID, Integer isNotNull, String processID);
+    Integer insertActReAuditPropsStorageView(String taskEvent, Integer billID, Integer viewID, Integer propID, Integer isNotNull, String processID);
 
     //单独处理一条MRP的，这是仓储视图里面的，就配置一条字段
     AuditProps getAuditPropsMRP(Integer viewID, Integer billID, String taskEventName, String processID);
 
+    //单独处理一条销售视图的，这是会计成本视图里面的，就配置一条字段
+    AuditProps getAuditPropsSale(Integer viewID, Integer billID, String taskEventName, String processID);
+
     //这张表主要是配置流程视图与接口的对接配置
     void insertActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName, Integer interfaceID);
+
+    //配置流程视图与接口的对接配置在插入之前先删除,避免重复
+    void deleteActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName);
 
     //插入更新规范,2790扩充工厂临时加了一张mrp视图
     void insertSpecification(String sql);

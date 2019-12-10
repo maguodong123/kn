@@ -83,10 +83,17 @@
         values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1',#{isNotNull},#{processID})]]>
     </insert>
 
+
+
     <delete id="deleteActReAuditView">
 		<![CDATA[delete from act_re_auditview
                 where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
 	</delete>
+
+    <delete id="deleteActReAuditViewEvent">
+        <![CDATA[delete from act_re_auditview
+                where TASKEVENT_NAME_=#{taskEventName} and BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
+    </delete>
 
     <delete id="deleteActReAuditViewOne">
 		<![CDATA[delete from act_re_auditview
@@ -121,7 +128,7 @@
 
     <insert id="insertActReAuditPropsStorageView">
 		<![CDATA[insert into act_re_auditprops values
-                ('1',#{viewName},#{billID},#{viewID},#{propID},'1',#{isNotNull},#{processID})]]>
+                ('1',#{taskEvent},#{billID},#{viewID},#{propID},'1',#{isNotNull},#{processID})]]>
 	</insert>
 
     <select id="getAuditPropsMRP" resultType="cn.kn.dao.entity.AuditProps">
@@ -136,6 +143,19 @@
                 and ACT_DEF_ID_=#{processID}
                 where B_PROPERTIES.NAME = '发货仓储地点']]>
 	</select>
+
+    <select id="getAuditPropsSale" resultType="cn.kn.dao.entity.AuditProps">
+        <![CDATA[select b_dataview.id viewId,bill_id_ billId,taskevent_Name_ taskEventName,
+                b_properties.name propName,b_properties.id propId, is_have_ ishave ,is_notnull isnotnull
+                 FROM b_dataview join l_viewproperties
+                 ON b_dataview.id=#{viewID} and b_dataview.id=l_viewproperties.dataview join b_properties
+                 ON b_properties.id=l_viewproperties.properties
+                 LEFT JOIN act_re_auditprops
+                 ON l_viewproperties.properties= act_re_auditprops.prop_id_
+                and bill_id_=#{billID} and taskevent_name_=#{taskEventName}
+                and ACT_DEF_ID_=#{processID}
+                where B_PROPERTIES.NAME = '该物料的科目设置组']]>
+    </select>
 
     <insert id="insertActReAuditInterFaceTaskEvent">
         <![CDATA[insert into act_re_auditinterfacetaskevent values
@@ -191,8 +211,9 @@
             and taskevent_name_=#{taskEventName} and ACT_DEF_ID_=#{processID}]]>
     </select>
 
-
-
+    <delete id="deleteActReAuditInterFaceTaskEvent">
+        <![CDATA[delete from act_re_auditinterfacetaskevent where ACT_DEF_ID_=#{processID} and BILL_ID_ =#{billID} and TASKEVENT_NAME_=#{taskEventName}]]>
+    </delete>
 
 </mapper>
 

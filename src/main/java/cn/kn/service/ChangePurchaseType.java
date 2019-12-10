@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * 变更采购类型
  * 主要是解决12月6号康尼李品变更2700工厂错误的问题
+ * 这里类主要是处理了变更工厂采购类型的时候界面空白。就刷了申请人MRP视图和属性权限剩下的没弄
  */
 @RestController
 public class ChangePurchaseType {
@@ -68,6 +69,7 @@ public class ChangePurchaseType {
                 List<Properties> propertiesList = wcm.getProperties(mrpID, bill, factoryCode, processId);
                 for (Properties properties : propertiesList) {
                     propName = properties.getPropertiesName();
+
                     if (propName.equals("采购类型") || propName.equals("特殊采购类")) {
                         //插入的是流程属性视图
                         //现在开始插入申请人的权限,2个一个模型视图和MRP视图

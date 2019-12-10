@@ -143,6 +143,7 @@ public class WorkflowConfigurationService {
         logger.info("程序运行完毕!");
     }
 
+    //这是配置接口的地方
     private void insertFaceTaskEvent(String viewName, Integer bill) {
         try {
             if (viewName.equals("2790工厂-MRP视图")) {
