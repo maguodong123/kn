@@ -75,7 +75,7 @@
 
     <insert id="insertActReAuditView">
 		<![CDATA[insert into act_re_auditview
-                values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1','1',#{processID})]]>
+                values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1','0',#{processID})]]>
 	</insert>
 
     <insert id="insertActReAuditViewOne">
