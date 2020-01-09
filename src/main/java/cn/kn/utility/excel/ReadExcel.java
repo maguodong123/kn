@@ -22,6 +22,26 @@ public class ReadExcel {
     public ReadExcel() throws IOException {
     }
 
+
+    public List<String> readExcelString() throws IOException {
+        DataFormatter formatter = new DataFormatter();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i <= lastRowIndex; i++) {
+            HSSFRow row = sheet.getRow(i);
+            if (row == null) {
+                break;
+            }
+            ExcelValue excelValue = new ExcelValue();
+            short lastCellNum = row.getLastCellNum();
+            for (int j = 0; j < lastCellNum; j++) {
+                list.add(i, formatter.formatCellValue(row.getCell(0)));
+                break;
+            }
+        }
+        return list;
+    }
+
+
     public List<ExcelValue> readExcelValue() throws IOException {
         DataFormatter formatter = new DataFormatter();
         List<ExcelValue> list = new ArrayList<>();

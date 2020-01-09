@@ -8,67 +8,152 @@
 
     <select id="QueryAll" resultType="cn.kn.dao.entity.SelectData">
 		<![CDATA[
-		select
-			   mdm_datalibray.code code,
-			   b_dataview.id viewid,
-			   b_dataview.name viewname,
-			   B_PROPERTIES.name propertiessname,
-			   B_PROPERTIES.id propertiesid,
-			   count(*) count
-		from
-			 mdm_datalibray join b_datarule on mdm_datalibray.datarule=b_datarule.id
-			 join l_ruleview on l_ruleview.datarule=b_datarule.id
-			 join b_dataview on l_ruleview.dataview=b_dataview.id
-			 join l_viewproperties on l_viewproperties.dataview=b_dataview.id
-			 join b_properties on b_properties.id=l_viewproperties.properties
-			 join B_TASKPROPERTIES on B_TASKPROPERTIES.properties = b_properties.id and mdm_datalibray.task = B_TASKPROPERTIES.TASKBILL
-		where (md=1) and (not (b_dataview.name like '%仓储视图'))
-		group by mdm_datalibray.code,
-			   b_dataview.id,
-			   b_dataview.name,
-				B_PROPERTIES.id ,
-			   B_PROPERTIES.name
-		having count(*)>1
+
+
+
+                                select
+                                       mdm_datalibray.code code,
+                                       b_dataview.id viewid,
+                                       b_dataview.name viewname,
+                                       B_PROPERTIES.name propertiessname,
+                                       B_PROPERTIES.id propertiesid,
+                                       count(*) count
+                                from
+                                     mdm_datalibray join b_datarule on mdm_datalibray.datarule=b_datarule.id
+                                     join l_ruleview on l_ruleview.datarule=b_datarule.id
+                                     join b_dataview on l_ruleview.dataview=b_dataview.id
+                                     join l_viewproperties on l_viewproperties.dataview=b_dataview.id
+                                     join b_properties on b_properties.id=l_viewproperties.properties
+                                     join B_TASKPROPERTIES on B_TASKPROPERTIES.properties = b_properties.id and mdm_datalibray.task = B_TASKPROPERTIES.TASKBILL
+                                where (md=1) and (not (b_dataview.name like '%仓储视图'))
+                                group by mdm_datalibray.code,
+                                       b_dataview.id,
+                                       b_dataview.name,
+                                        B_PROPERTIES.id ,
+                                       B_PROPERTIES.name
+                                having count(*)>1
+
+
+
         ]]>
 	</select>
 
 
     <select id="QueryTask" resultType="java.lang.Integer">
 		<![CDATA[
-        select distinct B_TASKPROPERTIES.TASKBILL taskproperties_taskbill
-        from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
-        where MDM_DATALIBRAY.CODE = #{code}
+
+
+
+                                select distinct B_TASKPROPERTIES.TASKBILL taskproperties_taskbill
+                                from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+                                where MDM_DATALIBRAY.CODE = #{code}
+
+
+
         ]]>
 	</select>
 
+
     <select id="getPropData" resultType="cn.kn.dao.entity.PropertiesData">
 		<![CDATA[
-        select B_TASKPROPERTIES.id taskprid,
-               B_TASKPROPERTIES.TASKBILL taskprbill,
-               B_TASKPROPERTIES.PROPERTIES taskprties,
-               B_TASKPROPERTIES.PROPVALUE taskprvalue,
-               B_PROPERTIES.NAME propname,
-                L_Viewproperties.DATAVIEW lviewdataview,
-               B_DATAVIEW.NAME dataname
-        from B_TASKPROPERTIES join B_PROPERTIES on B_PROPERTIES.ID=B_TASKPROPERTIES.PROPERTIES
-                            join L_Viewproperties on B_PROPERTIES.ID= L_Viewproperties.PROPERTIES
-                            join B_DATAVIEW on L_VIEWPROPERTIES.DATAVIEW=B_DATAVIEW.ID
-        where B_TASKPROPERTIES.PROPERTIES = #{propertiesid} and B_TASKPROPERTIES.TASKBILL=#{taskproperties_taskbill}
+
+
+
+                                select B_TASKPROPERTIES.id taskprid,
+                                       B_TASKPROPERTIES.TASKBILL taskprbill,
+                                       B_TASKPROPERTIES.PROPERTIES taskprties,
+                                       B_TASKPROPERTIES.PROPVALUE taskprvalue,
+                                       B_PROPERTIES.NAME propname,
+                                        L_Viewproperties.DATAVIEW lviewdataview,
+                                       B_DATAVIEW.NAME dataname
+                                from B_TASKPROPERTIES join B_PROPERTIES on B_PROPERTIES.ID=B_TASKPROPERTIES.PROPERTIES
+                                                    join L_Viewproperties on B_PROPERTIES.ID= L_Viewproperties.PROPERTIES
+                                                    join B_DATAVIEW on L_VIEWPROPERTIES.DATAVIEW=B_DATAVIEW.ID
+                                where B_TASKPROPERTIES.PROPERTIES = #{propertiesid} and B_TASKPROPERTIES.TASKBILL=#{taskproperties_taskbill}
+
+
+
         ]]>
 	</select>
 
 
     <delete id="deleteMdmProptype">
 		<![CDATA[
-        delete from Mdm_Proptype where TASKPROP = #{taskprop}
+
+
+
+                                delete from Mdm_Proptype where TASKPROP = #{taskprop}
+
+
+
         ]]>
 	</delete>
 
     <delete id="deleteTaskProperties">
 		<![CDATA[
-        delete from B_TASKPROPERTIES where id = #{id}
+
+
+
+                                delete from B_TASKPROPERTIES where id = #{id}
+
+
+
         ]]>
 	</delete>
+
+
+    <select id="getOldCode" resultType="java.lang.String">
+		select OLDCODE from MDM_DATALIBRAY where CODE=#{code}
+	</select>
+
+
+    <select id="getDataInterface" resultType="java.lang.String">
+		select CONNDATA from B_DATAINTERFACE where ID=
+		(select max(ID) from B_DATAINTERFACE where CODE=#{code}
+                                       and USERNAME=#{name}
+                                       and CONN='SAP'
+                                       and DETANAME=#{factory}
+                                       and STATE='推送成功')
+	</select>
+
+    <select id="getTask" resultType="java.lang.String">
+		select TASK from MDM_DATALIBRAY where CODE=#{code}
+	</select>
+
+    <select id="getValues" resultType="cn.kn.dao.entity.Values">
+		SELECT b_taskproperties.ID,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.NAME FROM
+		b_taskproperties JOIN b_properties ON
+		b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
+		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
+		b_dataview.id=l_viewproperties.dataview
+		WHERE b_taskproperties.taskbill = #{task}
+		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_taskproperties.PROPVALUE is null
+	</select>
+
+	<select id="getOneValues" resultType="cn.kn.dao.entity.Values">
+		SELECT b_taskproperties.id,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.name FROM
+b_taskproperties JOIN b_properties ON
+b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
+b_properties.id=l_viewproperties.properties JOIN b_dataview ON
+b_dataview.id=l_viewproperties.dataview
+WHERE b_taskproperties.taskbill=#{task}
+  AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='计划交货时间'
+	</select>
+
+
+
+	<select id="getDataInterfaceError" resultType="java.lang.String">
+								select CONNDATA
+						 FROM B_DATAINTERFACE
+						 WHERE ID= (select max(ID)
+						 FROM B_DATAINTERFACE
+						 WHERE CODE=#{code}
+						 and USERNAME=#{name}
+						 and CONN='SAP'
+						 and DETANAME=#{factory}
+						 and STATE='推送新增失败')
+	</select>
+
 </mapper>
 
 
