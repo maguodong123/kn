@@ -20,6 +20,7 @@ public interface SelectDataMapper {
 
     Values getOneValues(String task);
 
+    Values getTwoValues(String task);
 
 
     /**

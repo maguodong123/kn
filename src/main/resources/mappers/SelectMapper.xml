@@ -132,14 +132,23 @@
 
 	<select id="getOneValues" resultType="cn.kn.dao.entity.Values">
 		SELECT b_taskproperties.id,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.name FROM
-b_taskproperties JOIN b_properties ON
-b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
-b_properties.id=l_viewproperties.properties JOIN b_dataview ON
-b_dataview.id=l_viewproperties.dataview
-WHERE b_taskproperties.taskbill=#{task}
-  AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='计划交货时间'
+		b_taskproperties JOIN b_properties ON
+		b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
+		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
+		b_dataview.id=l_viewproperties.dataview
+		WHERE b_taskproperties.taskbill=#{task}
+  		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='计划交货时间'
 	</select>
 
+	<select id="getTwoValues" resultType="cn.kn.dao.entity.Values">
+		SELECT b_taskproperties.id,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.name FROM
+		b_taskproperties JOIN b_properties ON
+		b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
+		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
+		b_dataview.id=l_viewproperties.dataview
+		WHERE b_taskproperties.taskbill=#{task}
+		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='收货处理时间'
+	</select>
 
 
 	<select id="getDataInterfaceError" resultType="java.lang.String">
@@ -151,8 +160,9 @@ WHERE b_taskproperties.taskbill=#{task}
 						 and USERNAME=#{name}
 						 and CONN='SAP'
 						 and DETANAME=#{factory}
-						 and STATE='推送新增失败')
+						 and STATE like '%'||'失败'||'%')
 	</select>
+
 
 </mapper>
 

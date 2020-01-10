@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Validator;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * @version 1.0
@@ -65,23 +63,30 @@ public class Recovery {
                 map.clear();
                 values.clear();
                 //然后在处理黄敏的重新覆盖掉
-                String huangstr = sd.getDataInterface(code, "黄敏", factory);
+                String huangstr = sd.getDataInterfaceError(code, "黄敏", factory);
                 String[] arrays = huangstr.split(",");
-                for (String s : array) {
+                for (String s : arrays) {
                     if (s.split(":").length > 1) {
                         String[] mapper = s.split(":");
                         map.put(mapper[0], mapper[1]);
                     }
                 }
-                Values values1 = sd.getOneValues(task);
                 Set<String> set2 = map.keySet();
+                Values jihuajiaohuo = sd.getOneValues(task);
+                Values shouhuochuli = sd.getTwoValues(task);
                 for (String key : set2) {
-                    if (values1.getNAME().equals(key)) {
-                        setTaskAndCode(map.get(key), Integer.parseInt(values1.getPROPERTIES()), Integer.parseInt(task));
+                    if ("计划交货时间".equals(key)) {
+                        setTaskAndCode(map.get(key), Integer.parseInt(jihuajiaohuo.getPROPERTIES()), Integer.parseInt(task));
+                    }
+                    if ("收货处理时间".equals(key)) {
+                        setTaskAndCode(map.get(key), Integer.parseInt(shouhuochuli.getPROPERTIES()), Integer.parseInt(task));
                     }
                 }
                 map.clear();
+                set1.clear();
+                set2.clear();
             }
+            System.out.println("程序循环完成");
         } catch (Exception e) {
             e.printStackTrace();
         }
