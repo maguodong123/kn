@@ -7,6 +7,9 @@ import cn.kn.dao.entity.Values;
 
 import java.util.List;
 
+/**
+ * @author Administrator
+ */
 public interface SelectDataMapper {
 
     //一上来把查询出来重复属性的结果存储到一个list集合中
@@ -22,6 +25,40 @@ public interface SelectDataMapper {
 
     Values getTwoValues(String task);
 
+    /**
+     * 获取编码的id
+     *
+     * @param code
+     * @return
+     */
+    String getCodeId(String code);
+
+    /**
+     * 修改旧编码便得关联新编码id
+     *
+     * @param oldCode as
+     * @param codeId  as
+     */
+    void updateOldCode(String codeId, String oldCode);
+
+    /**
+     * 修改关联表得关系
+     *
+     * @param codeId
+     * @param oldCode
+     * @return
+     */
+    Integer updateOldcode2lib(String codeId, String oldCode);
+
+    /**
+     * 修改编码表得旧编码字段
+     * @param code
+     * @param oldCode
+     */
+    void updateMDM_DATALIBRAY(String code,String oldCode);
+
+
+    void insertOldcode2lib(String oldCode, String codeId);
 
     /**
      * 根据新编码获取旧编码
@@ -33,6 +70,7 @@ public interface SelectDataMapper {
 
     /**
      * 根据编码获取最新的任务单
+     *
      * @param code
      * @return
      */

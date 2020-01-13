@@ -27,8 +27,8 @@ public class Recovery {
 
     @GetMapping(value = "recovery")
     public void recovery() throws IOException {
-        String name = "邢万锦";
-        String factory = "物资2200工厂-MRP视图";
+        String name = "仇本全";
+        String factory = "物资2100工厂-MRP视图";
         String task;
         String str;
 

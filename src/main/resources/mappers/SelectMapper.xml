@@ -11,27 +11,29 @@
 
 
 
-                                select
-                                       mdm_datalibray.code code,
-                                       b_dataview.id viewid,
-                                       b_dataview.name viewname,
-                                       B_PROPERTIES.name propertiessname,
-                                       B_PROPERTIES.id propertiesid,
-                                       count(*) count
-                                from
-                                     mdm_datalibray join b_datarule on mdm_datalibray.datarule=b_datarule.id
-                                     join l_ruleview on l_ruleview.datarule=b_datarule.id
-                                     join b_dataview on l_ruleview.dataview=b_dataview.id
-                                     join l_viewproperties on l_viewproperties.dataview=b_dataview.id
-                                     join b_properties on b_properties.id=l_viewproperties.properties
-                                     join B_TASKPROPERTIES on B_TASKPROPERTIES.properties = b_properties.id and mdm_datalibray.task = B_TASKPROPERTIES.TASKBILL
-                                where (md=1) and (not (b_dataview.name like '%仓储视图'))
-                                group by mdm_datalibray.code,
-                                       b_dataview.id,
-                                       b_dataview.name,
-                                        B_PROPERTIES.id ,
-                                       B_PROPERTIES.name
-                                having count(*)>1
+
+                                        select
+                                               mdm_datalibray.code code,
+                                               b_dataview.id viewid,
+                                               b_dataview.name viewname,
+                                               B_PROPERTIES.name propertiessname,
+                                               B_PROPERTIES.id propertiesid,
+                                               count(*) count
+                                        from
+                                             mdm_datalibray join b_datarule on mdm_datalibray.datarule=b_datarule.id
+                                             join l_ruleview on l_ruleview.datarule=b_datarule.id
+                                             join b_dataview on l_ruleview.dataview=b_dataview.id
+                                             join l_viewproperties on l_viewproperties.dataview=b_dataview.id
+                                             join b_properties on b_properties.id=l_viewproperties.properties
+                                             join B_TASKPROPERTIES on B_TASKPROPERTIES.properties = b_properties.id and mdm_datalibray.task = B_TASKPROPERTIES.TASKBILL
+                                        where (md=1) and (not (b_dataview.name like '%仓储视图'))
+                                        group by mdm_datalibray.code,
+                                               b_dataview.id,
+                                               b_dataview.name,
+                                                B_PROPERTIES.id ,
+                                               B_PROPERTIES.name
+                                        having count(*)>1
+
 
 
 
@@ -44,9 +46,11 @@
 
 
 
-                                select distinct B_TASKPROPERTIES.TASKBILL taskproperties_taskbill
-                                from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
-                                where MDM_DATALIBRAY.CODE = #{code}
+
+                                        select distinct B_TASKPROPERTIES.TASKBILL taskproperties_taskbill
+                                        from B_TASKPROPERTIES join MDM_DATALIBRAY on B_TASKPROPERTIES.TASKBILL=MDM_DATALIBRAY.TASK
+                                        where MDM_DATALIBRAY.CODE = #{code}
+
 
 
 
@@ -59,17 +63,19 @@
 
 
 
-                                select B_TASKPROPERTIES.id taskprid,
-                                       B_TASKPROPERTIES.TASKBILL taskprbill,
-                                       B_TASKPROPERTIES.PROPERTIES taskprties,
-                                       B_TASKPROPERTIES.PROPVALUE taskprvalue,
-                                       B_PROPERTIES.NAME propname,
-                                        L_Viewproperties.DATAVIEW lviewdataview,
-                                       B_DATAVIEW.NAME dataname
-                                from B_TASKPROPERTIES join B_PROPERTIES on B_PROPERTIES.ID=B_TASKPROPERTIES.PROPERTIES
-                                                    join L_Viewproperties on B_PROPERTIES.ID= L_Viewproperties.PROPERTIES
-                                                    join B_DATAVIEW on L_VIEWPROPERTIES.DATAVIEW=B_DATAVIEW.ID
-                                where B_TASKPROPERTIES.PROPERTIES = #{propertiesid} and B_TASKPROPERTIES.TASKBILL=#{taskproperties_taskbill}
+
+                                        select B_TASKPROPERTIES.id taskprid,
+                                               B_TASKPROPERTIES.TASKBILL taskprbill,
+                                               B_TASKPROPERTIES.PROPERTIES taskprties,
+                                               B_TASKPROPERTIES.PROPVALUE taskprvalue,
+                                               B_PROPERTIES.NAME propname,
+                                                L_Viewproperties.DATAVIEW lviewdataview,
+                                               B_DATAVIEW.NAME dataname
+                                        from B_TASKPROPERTIES join B_PROPERTIES on B_PROPERTIES.ID=B_TASKPROPERTIES.PROPERTIES
+                                                            join L_Viewproperties on B_PROPERTIES.ID= L_Viewproperties.PROPERTIES
+                                                            join B_DATAVIEW on L_VIEWPROPERTIES.DATAVIEW=B_DATAVIEW.ID
+                                        where B_TASKPROPERTIES.PROPERTIES = #{propertiesid} and B_TASKPROPERTIES.TASKBILL=#{taskproperties_taskbill}
+
 
 
 
@@ -82,7 +88,9 @@
 
 
 
-                                delete from Mdm_Proptype where TASKPROP = #{taskprop}
+
+                                        delete from Mdm_Proptype where TASKPROP = #{taskprop}
+
 
 
 
@@ -94,7 +102,9 @@
 
 
 
-                                delete from B_TASKPROPERTIES where id = #{id}
+
+                                        delete from B_TASKPROPERTIES where id = #{id}
+
 
 
 
@@ -127,31 +137,31 @@
 		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
 		b_dataview.id=l_viewproperties.dataview
 		WHERE b_taskproperties.taskbill = #{task}
-		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_taskproperties.PROPVALUE is null
+		AND b_dataview.name LIKE '%'||'SAP2100工厂-MRP视图'||'%' and b_taskproperties.PROPVALUE is null
 	</select>
 
-	<select id="getOneValues" resultType="cn.kn.dao.entity.Values">
+    <select id="getOneValues" resultType="cn.kn.dao.entity.Values">
 		SELECT b_taskproperties.id,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.name FROM
 		b_taskproperties JOIN b_properties ON
 		b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
 		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
 		b_dataview.id=l_viewproperties.dataview
 		WHERE b_taskproperties.taskbill=#{task}
-  		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='计划交货时间'
+  	AND b_dataview.name LIKE '%SAP基本视图%' and b_properties.NAME = '旧编码'
 	</select>
 
-	<select id="getTwoValues" resultType="cn.kn.dao.entity.Values">
+    <select id="getTwoValues" resultType="cn.kn.dao.entity.Values">
 		SELECT b_taskproperties.id,b_taskproperties.PROPERTIES,b_taskproperties.PROPVALUE,b_properties.name FROM
 		b_taskproperties JOIN b_properties ON
 		b_taskproperties.properties=b_properties.id JOIN L_Viewproperties ON
 		b_properties.id=l_viewproperties.properties JOIN b_dataview ON
 		b_dataview.id=l_viewproperties.dataview
 		WHERE b_taskproperties.taskbill=#{task}
-		AND b_dataview.name LIKE '%'||'SAP2200工厂-MRP视图'||'%' and b_properties.NAME='收货处理时间'
+		AND b_dataview.name LIKE '%'||'SAP2100工厂-MRP视图'||'%' and b_properties.NAME='收货处理时间'
 	</select>
 
 
-	<select id="getDataInterfaceError" resultType="java.lang.String">
+    <select id="getDataInterfaceError" resultType="java.lang.String">
 								select CONNDATA
 						 FROM B_DATAINTERFACE
 						 WHERE ID= (select max(ID)
@@ -162,6 +172,27 @@
 						 and DETANAME=#{factory}
 						 and STATE like '%'||'失败'||'%')
 	</select>
+
+
+    <select id="getCodeId" resultType="java.lang.String">
+		select ID from MDM_DATALIBRAY where CODE = #{code}
+	</select>
+
+    <update id="updateOldCode">
+		update B_OLDCODE set MDL=#{codeId} where CODE=#{oldCode}
+	</update>
+
+    <update id="updateOldcode2lib">
+		update L_Oldcode2lib set F_MD=#{codeId} where F_OLDCODE=#{oldCode}
+	</update>
+
+    <insert id="insertOldcode2lib">
+		insert into L_Oldcode2lib (f_oldcode, f_md, userid) values (#{oldCode},#{codeId},'2')
+	</insert>
+
+	<update id="updateMDM_DATALIBRAY">
+		update MDM_DATALIBRAY set OLDCODE=#{oldCode} where CODE=#{code}
+	</update>
 
 
 </mapper>
