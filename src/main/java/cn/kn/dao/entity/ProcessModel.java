@@ -2,6 +2,9 @@ package cn.kn.dao.entity;
 
 import java.io.Serializable;
 
+/**
+ * @author Administrator
+ */
 public class ProcessModel implements Serializable {
     private Integer id;
     private String version;

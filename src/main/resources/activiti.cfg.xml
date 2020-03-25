@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+        <!--                <property name="jdbcUrl" value="jdbc:oracle:thin:@158.158.5.84:1521:orcl"/>-->
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@158.158.5.114:1521:orcl"/>
+        <property name="jdbcDriver" value="oracle.jdbc.OracleDriver"/>
+        <property name="jdbcUsername" value="EDG5_2"/>
+        <property name="jdbcPassword" value="123"/>
+        <property name="jdbcMaxActiveConnections" value="500"/>
+        <property name="jdbcMaxIdleConnections" value="40"/>
+        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="jobExecutorActivate" value="false"/>
+        <property name="mailServerHost" value="mail.jobhand.com"/>
+        <property name="mailServerPort" value="5025"/>
+        <property name="jdbcPingEnabled" value="true"/>
+        <property name="jdbcPingQuery" value="select 1"/>
+        <property name="jdbcPingConnectionNotUsedFor" value="3600000"/>
+
+    </bean>
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
+    <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService"/>
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+</beans>

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 变更采购类型
  * 主要是解决12月6号康尼李品变更2700工厂错误的问题ChangePurchaseType
- * 上面的个我只是刷完了MRP视图和申请人视图,还有对应的属性。设下的6个视图和属性都没刷,现在我决定。缺少啥刷啥
+ * 上面的个我只是刷完了MRP视图和申请人视图,还有对应的属性。剩下的6个视图和属性都没刷,现在我决定。缺少啥刷啥
  */
 @RestController
 public class Supplement {//补充

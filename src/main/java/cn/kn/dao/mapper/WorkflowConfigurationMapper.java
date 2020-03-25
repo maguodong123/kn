@@ -4,23 +4,31 @@ import cn.kn.dao.entity.*;
 
 import java.util.List;
 
+/**
+ * @author Administrator
+ */
 public interface WorkflowConfigurationMapper {
 
-    //这是查询ACT_RE_MODEL这张表里面的所有流程,然后存储到一个集合中,传入查询的流程名字
+
+    /**
+     * 这是查询ACT_RE_MODEL这张表里面的所有流程,然后存储到一个集合中,传入查询的流程名字
+     * @param processName 流程的名字:流程管理→流程模型→名称
+     * @return ProcessModel
+     */
     List<ProcessModel> getProcessModel(String processName);
 
-    //获取MRP视图ID,条件就是NAME全名
-    Integer getDataViewMRP(String name);
-
-    //获取属性名称和属性ID
+    /**
+     * 获取属性名称和属性ID
+     * @param viewID
+     * @param billID
+     * @param taskEventName
+     * @param processID
+     * @return
+     */
     List<Properties> getProperties(Integer viewID, Integer billID, String taskEventName, String processID);
 
     //删除流程属性,这次要查询的属性多一个
     void deleteActReAuditPropsAndTaskEvent(String taskEventName, Integer viewID, Integer billID, Integer propID, String processID);
-
-    List<ViewProp> getTaskEventName(Integer ruleID, Integer billID, String taskEventName, String viewName, String processID);
-
-    List<Integer> getActReAuditView(String taskEventName, Integer viewID, Integer ruleID, Integer billID, String processID);
 
     void deleteActReAuditView(Integer viewID, Integer billID, String processID);
 
@@ -29,17 +37,28 @@ public interface WorkflowConfigurationMapper {
     //删除流程视图,详细的属性查询
     void deleteActReAuditViewOne(String taskEventName, Integer viewID, Integer billID, String processID);
 
+    void deleteActReAuditProps(Integer viewID, Integer billID, String processID);
+
+    //配置流程视图与接口的对接配置在插入之前先删除,避免重复
+    void deleteActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName);
+
+
+
+    List<ViewProp> getTaskEventName(Integer ruleID, Integer billID, String taskEventName, String viewName, String processID);
+
+    List<Integer> getActReAuditView(String taskEventName, Integer viewID, Integer ruleID, Integer billID, String processID);
+
     List<Integer> getActReAuditProps(String taskEventName, Integer viewID, Integer billID, String processID);
 
-    void deleteActReAuditProps(Integer viewID, Integer billID, String processID);
+    List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName, String processID);
+
+
 
     //插入act_re_auditview表
     Integer insertActReAuditView(String viewName, Integer viewID, Integer ruleID, Integer billID, String processID);
 
     //插入act_re_auditview表单独的申请人SQL
     Integer insertActReAuditViewOne(String viewName, Integer viewID, Integer ruleID, Integer billID, Integer isNotNull, String processID);
-
-    List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName, String processID);
 
     //插入对应的属性操作权限
     Integer insertActReAuditPropsStorageView(String taskEvent, Integer billID, Integer viewID, Integer propID, Integer isNotNull, String processID);
@@ -52,9 +71,6 @@ public interface WorkflowConfigurationMapper {
 
     //这张表主要是配置流程视图与接口的对接配置
     void insertActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName, Integer interfaceID);
-
-    //配置流程视图与接口的对接配置在插入之前先删除,避免重复
-    void deleteActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName);
 
     //插入更新规范,2790扩充工厂临时加了一张mrp视图
     void insertSpecification(String sql);
@@ -76,4 +92,10 @@ public interface WorkflowConfigurationMapper {
     Integer getAuditViewIsHeck(Integer viewID, Integer ruleID, Integer billID);
 
     Bill getBill(Integer ruleID, String ruleName);
+
+    //获取MRP视图ID,条件就是NAME全名
+    Integer getDataViewMRP(String name);
+
+
+
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kn.dao.mapper.ExpansionFactoryMapper">
+
+
+    <select id="getDataRuleId" resultType="java.lang.Integer">
+        SELECT b_datarule.id FROM b_datarule,l_ruleview,b_dataview
+        where b_datarule.id=l_ruleview.datarule and b_dataview.id=l_ruleview.dataview
+        and b_dataview.F_PRIVATE=1 and b_datarule.F_ENABLE=1 and b_dataview.MASTER=(SELECT id FROM MASTERDATA where name=#{type})
+        <if test="ruleidr ==1">
+            and
+            <foreach collection="ruleid" item="task" open="(" separator="or" close=")">
+                b_datarule.id=#{task}
+            </foreach>
+        </if>
+        and b_datarule.id not in (select RULEID from G_RECORDEXTENDEDDETAILS where GC=#{factory})
+    </select>
+
+
+
+</mapper>
