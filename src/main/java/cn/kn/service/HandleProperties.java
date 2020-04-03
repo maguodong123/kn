@@ -29,11 +29,11 @@ public class HandleProperties {
 
     @GetMapping(value = "handleProperties")
     public void handleProperties() throws IOException {
-        ReadExcel readExcel = new ReadExcel();
-        List<ExcelValue> excelValues = readExcel.readExcelValue();
-        for (ExcelValue value : excelValues) {
-            setTaskAndCode(value.getValue(), Integer.parseInt(value.getProperties()), Integer.parseInt(value.getTaskBill()));
-        }
+//        ReadExcel readExcel = new ReadExcel();
+//        List<ExcelValue> excelValues = readExcel.readExcelValue();
+//        for (ExcelValue value : excelValues) {
+//            setTaskAndCode(value.getValue(), Integer.parseInt(value.getProperties()), Integer.parseInt(value.getTaskBill()));
+//        }
         //这是根据那个很长的关联查询批量删除视图的
 //        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
 //        for (ExcelSAP sap : excelSAPS) {
@@ -46,6 +46,12 @@ public class HandleProperties {
 //        for (ExcelMDM excelMDM:excelMDMS){
 //            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
 //        }
+
+
+
+
+
+
     }
 
 

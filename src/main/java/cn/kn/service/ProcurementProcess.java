@@ -6,6 +6,7 @@ import cn.kn.utility.exceptionhandling.ResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Date 2020/3/25 16:39
  * @Description 专门用来刷接口采购类型的
  */
+@RestController
 public class ProcurementProcess {
     private WorkflowConfigurationMapper wcm;
     private final Logger logger = LoggerFactory.getLogger(Supplement.class);
@@ -32,7 +34,7 @@ public class ProcurementProcess {
                 "会计成本视图", "工作计划视图", "MRP视图"};
         logger.info("流程配置程序开始运行!");
         String taskEvent;
-        List<ProcessModel> processModels = wcm.getProcessModel("正式2700工厂采购类型流程");
+        List<ProcessModel> processModels = wcm.getProcessModel("正式2800工厂采购类型流程");
         for (ProcessModel processModel : processModels) {
             int bill = processModel.getId();
             //现在开始组合配置工厂
