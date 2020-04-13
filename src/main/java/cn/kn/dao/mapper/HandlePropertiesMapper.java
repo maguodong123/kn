@@ -2,6 +2,7 @@ package cn.kn.dao.mapper;
 
 import cn.kn.dao.entity.table.CodePropType;
 import cn.kn.dao.entity.table.TaskProperties;
+import cn.kn.dao.entity.table.ViewProps;
 
 import java.util.List;
 
@@ -25,5 +26,9 @@ public interface HandlePropertiesMapper {
     void updateTaskProperties(String value, Integer properties, Integer taskBill);
     //修改编码属性表value
     void updateCodePropType(String value, Integer prop, Integer taskProp);
+
+    List<ViewProps> getViewProps(Integer taskBill,String viewName,String propName);
+
+
 
 }

@@ -20,46 +20,72 @@
     </resultMap>
 
     <select id="getTaskPropertiesList" resultMap="TaskPropertiesMap">
-        <![CDATA[select * FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+        <![CDATA[
+        select * FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}
+        ]]>
     </select>
 
     <select id="getTaskPropertiesID" resultType="java.lang.Integer">
-        <![CDATA[select id FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+        <![CDATA[
+        select id FROM B_Taskproperties where PROPERTIES=#{properties} and TASKBILL = #{taskBill}
+        ]]>
     </select>
 
     <select id="getCodePropTypeList" resultMap="CodePropTypeMap">
-        <![CDATA[select * from Mdm_Proptype where TASKPROP=#{taskPropID}]]>
+        <![CDATA[
+        select * from Mdm_Proptype where TASKPROP=#{taskPropID}
+        ]]>
     </select>
 
     <select id="getCodePropTypeID" resultType="java.lang.Integer">
-        <![CDATA[select id from Mdm_Proptype where TASKPROP=#{taskPropID}]]>
+        <![CDATA[
+        select id from Mdm_Proptype where TASKPROP=#{taskPropID}
+        ]]>
     </select>
 
     <delete id="deleteTaskProperties">
-        <![CDATA[delete from B_TASKPROPERTIES where id = #{taskPropertiesID}]]>
+        <![CDATA[
+        delete from B_TASKPROPERTIES where id = #{taskPropertiesID}
+        ]]>
     </delete>
-    
+
     <delete id="deleteCodePropType">
-        <![CDATA[delete from Mdm_Proptype where TASKPROP = #{taskPropertiesID}]]>
+        <![CDATA[
+        delete from Mdm_Proptype where TASKPROP = #{taskPropertiesID}
+        ]]>
     </delete>
 
     <select id="getRelationalQueryTaskPropertiesID" resultType="java.lang.Integer">
-        <![CDATA[SELECT b_taskproperties.ID FROM b_taskproperties
-        JOIN b_properties ON b_taskproperties.properties=b_properties.id
-        JOIN L_Viewproperties ON b_properties.id=l_viewproperties.properties
-        JOIN b_dataview ON b_dataview.id=l_viewproperties.dataview
-        JOIN mdm_datalibray ON mdm_datalibray.task=b_taskproperties.taskbill
-        WHERE b_taskproperties.taskbill=#{taskBill}
-         and B_DATAVIEW.NAME=#{dataName}
-         and MDM_DATALIBRAY.CODE=#{code}]]>
+        <![CDATA[
+        SELECT b_taskproperties.ID FROM b_taskproperties
+                JOIN b_properties ON b_taskproperties.properties=b_properties.id
+                JOIN L_Viewproperties ON b_properties.id=l_viewproperties.properties
+                JOIN b_dataview ON b_dataview.id=l_viewproperties.dataview
+                JOIN mdm_datalibray ON mdm_datalibray.task=b_taskproperties.taskbill
+                WHERE b_taskproperties.taskbill=#{taskBill}
+                 and B_DATAVIEW.NAME=#{dataName}
+                 and MDM_DATALIBRAY.CODE=#{code}
+        ]]>
     </select>
 
     <update id="updateTaskProperties">
-        <![CDATA[update B_Taskproperties set PROPVALUE=#{value} where PROPERTIES=#{properties} and TASKBILL = #{taskBill}]]>
+        <![CDATA[
+        update B_Taskproperties set PROPVALUE=#{value} where PROPERTIES=#{properties} and TASKBILL = #{taskBill}
+        ]]>
     </update>
-    
+
     <update id="updateCodePropType">
-       <![CDATA[update Mdm_Proptype set VALUE =#{value} where PROP = #{prop} and TASKPROP=#{taskProp}]]>
+       <![CDATA[
+        update Mdm_Proptype set VALUE =#{value} where PROP = #{prop} and TASKPROP=#{taskProp}
+        ]]>
     </update>
+
+    <select id="getViewProps" resultType="cn.kn.dao.entity.table.ViewProps">
+        select BS.ID,BS.TASKBILL,BS.PROPERTIES,BP.NAME PROPNAME,BS.BASEDATANAME,BS.PROPVALUE,BD.NAME DATANAME
+       from B_TASKPROPERTIES BS join B_PROPERTIES BP on BS.PROPERTIES = BP.ID
+        join l_viewproperties on BP.ID = L_VIEWPROPERTIES.PROPERTIES join B_DATAVIEW BD on L_VIEWPROPERTIES.DATAVIEW = BD.ID
+        where TASKBILL=#{taskBill} and BD.NAME like '%'||#{viewName}||'' and BP.NAME=#{propName}
+    </select>
+
 
 </mapper>

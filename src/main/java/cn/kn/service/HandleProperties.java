@@ -46,6 +46,7 @@ public class HandleProperties {
 //        for (ExcelMDM excelMDM:excelMDMS){
 //            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
 //        }
+        int[] ints = {5484333,5484034};
 
 
 
