@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kn.dao.mapper.SHyongdaMapper">
+
+
+    <select id="getWhole" resultType="java.lang.String">
+         select tb.ID
+         FROM b_taskbill tb
+         LEFT JOIN MDM_DATALIBRAY mdm
+         ON tb.id = mdm.task
+         LEFT JOIN b_datainterface face
+         ON face.code = mdm.code join B_DATARULE rul
+         ON rul.id = tb.MODELID join L_RULEVIEW lrv
+         ON lrv.DATARULE = rul.ID join b_dataview vw
+         ON vw.id = lrv.DATAVIEW and vw.type = 0
+         WHERE tb.status = 9 and vw.master = '8'
+    </select>
+
+    <select id="getCodeProp" resultType="java.lang.String">
+         select DISTINCT b_coderule.id
+         FROM l_billencoder join l_ruleview
+         ON l_billencoder.dataview=l_ruleview.dataview join b_taskbill
+         ON b_taskbill.modelid=l_ruleview.datarule join b_coderule
+         ON l_billencoder.coderule=b_coderule.id
+         WHERE b_taskbill.id=#{taskId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteb_propcode" parameterType="string">
+        delete
+         FROM b_propcode
+         WHERE cr=#{cr} and code in (select code
+         FROM MDM_DATALIBRAY
+         WHERE task=#{taskId,jdbcType=VARCHAR})
+    </delete>
+
+    <delete id="deleteL_DATALIBRAY2TASK">
+        delete
+         FROM L_DATALIBRAY2TASK
+         WHERE F_DATALIBRAY in(select id
+         FROM MDM_DATALIBRAY
+         WHERE task= #{taskId,jdbcType=VARCHAR})
+    </delete>
+
+    <delete id="deleteL_DATALIBRAY2TASK1">
+         delete
+         FROM L_DATALIBRAY2TASK
+         WHERE F_TASKBILL = #{taskId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteMDM_PROPTYPE">
+         delete
+         FROM MDM_PROPTYPE
+         WHERE mdl in(select id
+         FROM MDM_DATALIBRAY
+         WHERE task=#{taskId,jdbcType=VARCHAR})
+    </delete>
+
+    <delete id="deleteMDM_VIEWCODE">
+         delete
+         FROM MDM_VIEWCODE
+         WHERE mdl in(select id
+         FROM MDM_DATALIBRAY
+         WHERE task=#{taskId,jdbcType=VARCHAR})
+    </delete>
+
+    <delete id="deleteL_RUTASK2TASKBILL">
+         delete
+         FROM L_RUTASK2TASKBILL
+         WHERE f_taskbill=#{taskId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteMDM_DATALIBRAY">
+         delete
+         FROM MDM_DATALIBRAY
+         WHERE task=#{taskId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteb_taskproperties">
+         delete
+         FROM b_taskproperties
+         WHERE taskbill=#{taskId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteb_taskbill">
+         delete
+         FROM b_taskbill
+         WHERE id=#{taskId,jdbcType=VARCHAR}
+    </delete>
+</mapper>
