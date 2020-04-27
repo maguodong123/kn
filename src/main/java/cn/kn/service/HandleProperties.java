@@ -19,12 +19,9 @@ import java.util.List;
  */
 @RestController
 public class HandleProperties {
-    private static HandlePropertiesMapper handlePropertiesMapper;
+    public static HandlePropertiesMapper handlePropertiesMapper;
     private final Logger logger = LoggerFactory.getLogger(HandleProperties.class);
 
-    public HandleProperties(HandlePropertiesMapper handlePropertiesMapper) {
-        this.handlePropertiesMapper = handlePropertiesMapper;
-    }
 
 
     @GetMapping(value = "handleProperties")
