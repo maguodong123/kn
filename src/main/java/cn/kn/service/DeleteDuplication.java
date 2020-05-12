@@ -102,11 +102,6 @@ public class DeleteDuplication {
     }
 
 
-    public void demo() {
-        //一点个人的想法,我要用这样方法来存储数据，什么意思呢
-        //最外层的List存放编码，里面的list存放重复的数据
-        List<List<PropertiesData>> lists = new ArrayList<>();
-    }
 
 
 }

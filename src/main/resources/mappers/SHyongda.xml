@@ -15,7 +15,7 @@
          ON rul.id = tb.MODELID join L_RULEVIEW lrv
          ON lrv.DATARULE = rul.ID join b_dataview vw
          ON vw.id = lrv.DATAVIEW and vw.type = 0
-         WHERE tb.status = 9 and vw.master = '8'
+         WHERE tb.status = 9 and vw.master in(8,7,3)
     </select>
 
     <select id="getCodeProp" resultType="java.lang.String">
