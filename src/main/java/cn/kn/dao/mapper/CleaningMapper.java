@@ -16,4 +16,8 @@ public interface CleaningMapper {
     void setOldCode(Integer codeID,String oldCode);
     //修改编码关联表
     void setCodeCorrelation(Integer codeID,String oldCode);
+
+    //单独查询2700特殊采购类的
+    Integer getPropID(Integer task);
+
 }

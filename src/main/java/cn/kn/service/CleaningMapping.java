@@ -34,7 +34,7 @@ public class CleaningMapping {
                 List<TaskProperties> taskProperties = cleaningMapper.getTaskPropertiesList(task, "旧编码");
                 String value = excelCode.getOldCode() + ";";
                 //5先修改两张属性表
-                HandleProperties.setTaskAndCode(value, taskProperties.get(0).getProperties(), task);
+//                HandleProperties.setTaskAndCode(value, taskProperties.get(0).getProperties(), task);
                 //6然后修改旧编码表的关联关系
                 cleaningMapper.setOldCode(codeID, excelCode.getOldCode());
                 //最后修改关联关系表

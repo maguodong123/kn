@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,8 @@ public class DeleteDuplication {
     @RequestMapping(value = "DeleteDuplication", method = RequestMethod.GET)
     public void DeleteDuplication() throws FileNotFoundException {
         System.err.println("程序开始执行!");
-        List<SelectData> selectDataList = sd.QueryAll();//把查询出来的重复数据全部存储到该集合中
+        //把查询出来的重复数据全部存储到该集合中
+        List<SelectData> selectDataList = sd.QueryAll();
         System.err.println("程序开始循环!");
         PrintStream out = System.out;
         PrintStream ps = new PrintStream("./deletedata.txt");

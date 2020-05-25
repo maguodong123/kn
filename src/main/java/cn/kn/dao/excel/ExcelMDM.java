@@ -12,6 +12,7 @@ public class ExcelMDM extends ExcelMap{
                 '}';
     }
 
+    @Override
     public String getViewName() {
         return viewName;
     }

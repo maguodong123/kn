@@ -41,4 +41,12 @@
         <![CDATA[update L_OLDCODE2LIB set F_MD=#{codeID} where F_OLDCODE=#{oldCode}]]>
     </update>
 
+    <select id="getPropID" resultType="java.lang.Integer">
+        select BS.PROPERTIES
+       from B_TASKPROPERTIES BS join B_PROPERTIES BP on BS.PROPERTIES = BP.ID
+        join l_viewproperties on BP.ID = L_VIEWPROPERTIES.PROPERTIES join B_DATAVIEW BD on L_VIEWPROPERTIES.DATAVIEW = BD.ID
+        where TASKBILL=#{task} and BD.NAME like '%SAP2700工厂-MRP视图' and BP.NAME='采购类型'
+    </select>
+
+
 </mapper>

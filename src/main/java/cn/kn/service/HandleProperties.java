@@ -1,6 +1,7 @@
 package cn.kn.service;
 
 import cn.kn.dao.excel.ExcelValue;
+import cn.kn.dao.mapper.CleaningMapper;
 import cn.kn.dao.mapper.HandlePropertiesMapper;
 import cn.kn.utility.excel.ReadExcel;
 import cn.kn.utility.exceptionhandling.ResultEnum;
@@ -19,48 +20,40 @@ import java.util.List;
  */
 @RestController
 public class HandleProperties {
-    public static HandlePropertiesMapper handlePropertiesMapper;
-    private final Logger logger = LoggerFactory.getLogger(HandleProperties.class);
+    private HandlePropertiesMapper handlePropertiesMapper;
+    private CleaningMapper cleaningMapper;
 
+    public HandleProperties(HandlePropertiesMapper handlePropertiesMapper, CleaningMapper cleaningMapper) {
+        this.handlePropertiesMapper = handlePropertiesMapper;
+        this.cleaningMapper = cleaningMapper;
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(HandleProperties.class);
 
 
     @GetMapping(value = "handleProperties")
     public void handleProperties() throws IOException {
-//        ReadExcel readExcel = new ReadExcel();
-//        List<ExcelValue> excelValues = readExcel.readExcelValue();
-//        for (ExcelValue value : excelValues) {
-//            setTaskAndCode(value.getValue(), Integer.parseInt(value.getProperties()), Integer.parseInt(value.getTaskBill()));
-//        }
-        //这是根据那个很长的关联查询批量删除视图的
-//        List<ExcelSAP> excelSAPS = readExcel.readExcelSAP();
-//        for (ExcelSAP sap : excelSAPS) {
-//            List<Integer> integers = hpm.getRelationalQueryTaskPropertiesID(sap.getTaskBill(),sap.getDataName(),sap.getCode());
-//            for (int i=0;i<integers.size();i++){
-//                deleteTaskAndCodeID(integers.get(i));
-//            }
-//        }
-//        List<ExcelMDM> excelMDMS = readExcel.readExcelMap();
-//        for (ExcelMDM excelMDM:excelMDMS){
-//            deleteTaskAndCode(excelMDM.getKey(),excelMDM.getValue());
-//        }
-        int[] ints = {5484333,5484034};
-
-
-
-
-
-
+        ReadExcel readExcel = new ReadExcel();
+        Integer task;
+        Integer prop;
+        List<String> excelValues = readExcel.readExcelString();
+        for (String excels : excelValues) {
+            task = cleaningMapper.getCodeDataLibraryTask(excels);
+            prop = cleaningMapper.getPropID(task);
+            setTaskAndCode("E", prop, task);
+        }
+        System.out.println("完毕");
     }
 
 
     //修改属性值,传三个条件修改的值,属性id,任务单id
-    static void setTaskAndCode(String value, Integer properties, Integer taskBill) {
+    void setTaskAndCode(String value, Integer properties, Integer taskBill) {
         try {
             Integer taskPropertiesID = handlePropertiesMapper.getTaskPropertiesID(properties, taskBill);
             handlePropertiesMapper.updateTaskProperties(value, properties, taskBill);
             handlePropertiesMapper.updateCodePropType(value, properties, taskPropertiesID);
         } catch (Exception e) {
-            e.toString();
+            e.printStackTrace();
         }
     }
 

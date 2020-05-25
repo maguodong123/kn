@@ -22,7 +22,12 @@ public class ReadExcel {
     public ReadExcel() throws IOException {
     }
 
-
+    /**
+     * 只读取一个字段
+     *
+     * @return
+     * @throws IOException
+     */
     public List<String> readExcelString() throws IOException {
         DataFormatter formatter = new DataFormatter();
         List<String> list = new ArrayList<>();
