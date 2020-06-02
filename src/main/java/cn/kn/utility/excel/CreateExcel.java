@@ -1,6 +1,7 @@
 package cn.kn.utility.excel;
 
 
+import cn.kn.dao.entity.ExportExcel;
 import cn.kn.dao.excel.ExcelCode;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -11,14 +12,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *
  * @author Administrator
  */
 public class CreateExcel {
 
-    public static void exportExcelPaper(List<ExcelCode> list) {
+    public void exportExcelPaper(List<ExportExcel> list) {
         // 标题
-        String[] title = {"编码", "旧编码"};
+        String[] title = {"大类编码", "大类名称", "中类编码", "中类名称", "小类编码", "小类名称", "模型名称", "规则"};
         // 创建一个工作簿
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 创建一个工作表sheet
@@ -48,15 +48,34 @@ public class CreateExcel {
         for (int i = 1; i < (list.size() + 1); i++) {
             // 创建第i行
             HSSFRow nextRow = sheet.createRow(i);
-            for (int j = 0; j < 2; j++) {
-                ExcelCode eQuestion = list.get(i - 1);
+            for (int j = 0; j < 8; j++) {
+                ExportExcel eQuestion = list.get(i - 1);
                 HSSFCell cell2 = nextRow.createCell(j);
                 if (j == 0) {
-                    cell2.setCellValue(eQuestion.getCode());
+                    cell2.setCellValue(eQuestion.getOneCode());
                 }
                 if (j == 1) {
-                    cell2.setCellValue(eQuestion.getOldCode());
+                    cell2.setCellValue(eQuestion.getOntName());
                 }
+                if (j == 2) {
+                    cell2.setCellValue(eQuestion.getTwoCode());
+                }
+                if (j == 3) {
+                    cell2.setCellValue(eQuestion.getTwoName());
+                }
+                if (j == 4) {
+                    cell2.setCellValue(eQuestion.getThreeCode());
+                }
+                if (j == 5) {
+                    cell2.setCellValue(eQuestion.getThreeName());
+                }
+                if (j == 6) {
+                    cell2.setCellValue(eQuestion.getRuleName());
+                }
+                if (j == 7) {
+                    cell2.setCellValue(eQuestion.getRule());
+                }
+
             }
         }
         // 创建一个文件
@@ -75,7 +94,8 @@ public class CreateExcel {
 
     /**
      * 设置列宽()
-     * @param sheet 工作页
+     *
+     * @param sheet  工作页
      * @param collum 根
      */
     private static void setColumnWidth(HSSFSheet sheet, int collum) {

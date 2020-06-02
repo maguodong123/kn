@@ -157,6 +157,9 @@
                 where B_PROPERTIES.NAME = '该物料的科目设置组']]>
     </select>
 
+
+
+
     <insert id="insertActReAuditInterFaceTaskEvent">
         <![CDATA[insert into act_re_auditinterfacetaskevent values
         ('1',#{processID},#{billID},#{taskEventName},#{interfaceID})]]>
@@ -214,6 +217,14 @@
     <delete id="deleteActReAuditInterFaceTaskEvent">
         <![CDATA[delete from act_re_auditinterfacetaskevent where ACT_DEF_ID_=#{processID} and BILL_ID_ =#{billID} and TASKEVENT_NAME_=#{taskEventName}]]>
     </delete>
+
+    <select id="getLists" resultType="String">
+         SELECT distinct(bl.id)
+         FROM b_bill bl join b_task bk
+         ON bk.res like ''||'正式2700工厂采购类型流程'||'%' and bl.id=bk.bill join b_datarule
+         ON bl.f_datarule=b_datarule.id join l_category2bill cb
+         ON cb.f_bill=bl.id
+    </select>
 
 </mapper>
 

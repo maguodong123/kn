@@ -75,6 +75,9 @@ public interface WorkflowConfigurationMapper {
     //插入更新规范,2790扩充工厂临时加了一张mrp视图
     void insertSpecification(String sql);
 
+
+    List<String> getLists();
+
     Integer selectSpecification(Integer ruleID, Integer viewID);
 
     void deleteSpecification(Integer ruleID, Integer viewID);

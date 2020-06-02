@@ -1,12 +1,12 @@
 package cn.kn.service;
 
-import cn.kn.dao.excel.ExcelCode;
-import cn.kn.utility.excel.ReadExcel;
+import cn.kn.dao.mapper.WorkflowConfigurationMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+
 
 /**
  * @version 1.0
@@ -16,19 +16,31 @@ import java.util.List;
  */
 @RestController
 public class Demo01 {
+    private WorkflowConfigurationMapper wcm;
 
-    @GetMapping(value = "renming")
-    public void renming() throws IOException {
-        //1读取excel表格中新旧编码keyValue值
-        ReadExcel readExcel = new ReadExcel();
-        List<ExcelCode> excelMaps = readExcel.readExcelMap();
-        //2从第一个键值对开始循环
-        for (ExcelCode excelCode : excelMaps) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(excelCode.getCode() + "_" + excelCode.getOldCode());
-            System.out.println(stringBuilder.toString());
+    public Demo01(WorkflowConfigurationMapper wcm) {
+        this.wcm = wcm;
+    }
+
+    @GetMapping(value = "demo")
+    public void demo() {
+        String processId = "正式2700工厂采购类型流程:2:46920304";
+
+        List<String> lists = wcm.getLists();
+
+        for (String str : lists) {
+            int bill = Integer.parseInt(str);
+            //先删除错误的采购类型
+//            wcm.deleteActReAuditInterFaceTaskEvent(processId, bill, "2700工厂-采购视图");
+            //采购类型插入2次,采购,MRP
+            wcm.insertActReAuditInterFaceTaskEvent(processId, bill, "2700工厂-采购视图", 345);
+            wcm.insertActReAuditInterFaceTaskEvent(processId, bill, "2700工厂-采购视图", 352);
+            //MRP视图
+            wcm.insertActReAuditInterFaceTaskEvent(processId, bill, "2700工厂-MRP视图", 345);
         }
 
+
     }
+
 
 }

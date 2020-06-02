@@ -36,7 +36,7 @@ public class Clean {
             excelCode.setOldCode(sd.getOldCode(value));
             excelCodes.add(excelCode);
         }
-        CreateExcel.exportExcelPaper(excelCodes);
+//        CreateExcel.exportExcelPaper(excelCodes);
     }
 
 }

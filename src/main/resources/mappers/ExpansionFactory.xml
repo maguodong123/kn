@@ -19,5 +19,31 @@
     </select>
 
 
+    <select id="getOneList" resultType="cn.kn.dao.entity.BaseData">
+        select id,SUPERID,NAME,VALUE from BASEDATA where SUPERID=123575
+    </select>
+
+
+    <select id="getSuperList" resultType="cn.kn.dao.entity.BaseData">
+        select id,SUPERID,NAME,VALUE from BASEDATA where SUPERID=#{superId}
+    </select>
+
+    <select id="getRule" resultType="cn.kn.dao.entity.table.Maps" >
+        SELECT b_datarule.name key, wm_concat(to_char(B_PROPERTIES.name)) value
+        FROM L_RULEVIEW
+        join L_BILLENCODER
+        on L_BILLENCODER.DATAVIEW = L_RULEVIEW.DATAVIEW
+        join B_PROPERTIES
+        on L_BILLENCODER.PROP = B_PROPERTIES.id
+        join b_datarule
+        on L_RULEVIEW.DATARULE = b_datarule.id
+        WHERE L_RULEVIEW.DATARULE   = #{id} group by b_datarule.name
+    </select>
+
+    <select id="getRuleId" resultType="java.lang.String">
+        select distinct F_DATARULE from L_CATEGORY2BILL join B_BILL BB on L_CATEGORY2BILL.F_BILL = BB.ID
+        where F_CATEGORY=#{id}
+    </select>
+
 
 </mapper>

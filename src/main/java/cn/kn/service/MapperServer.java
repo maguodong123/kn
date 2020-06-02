@@ -88,7 +88,7 @@ public class MapperServer {
                 selectDataMapper.updateMDM_DATALIBRAY(excelCode.getCode(), excelCode.getOldCode().concat(";"));
             }
             //最后往excel表格里面记录一下数据
-            CreateExcel.exportExcelPaper(processed);
+//            CreateExcel.exportExcelPaper(processed);
         } catch (Exception e) {
             e.printStackTrace();
         }
