@@ -55,7 +55,7 @@
         ]]>
     </delete>
 
-    <select id="getRelationalQueryTaskPropertiesID" resultType="java.lang.Integer">
+    <select id="getRelationalQueryTaskPropertiesId" resultType="java.lang.Integer">
         <![CDATA[
         SELECT b_taskproperties.ID FROM b_taskproperties
                 JOIN b_properties ON b_taskproperties.properties=b_properties.id
