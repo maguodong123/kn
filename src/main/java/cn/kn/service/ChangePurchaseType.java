@@ -5,6 +5,7 @@ import cn.kn.dao.entity.Properties;
 import cn.kn.dao.mapper.WorkflowConfigurationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * 主要是解决12月6号康尼李品变更2700工厂错误的问题
  * 这里类主要是处理了变更工厂采购类型的时候界面空白。就刷了申请人MRP视图和属性权限剩下的没弄
  */
-@RestController
+@Controller
 public class ChangePurchaseType {
 
     private WorkflowConfigurationMapper wcm;

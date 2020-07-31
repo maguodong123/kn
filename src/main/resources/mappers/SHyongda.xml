@@ -5,6 +5,20 @@
 <mapper namespace="cn.kn.dao.mapper.SHyongdaMapper">
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <select id="getWhole" resultType="java.lang.String">
          select tb.ID
          FROM b_taskbill tb
@@ -87,4 +101,14 @@
          FROM b_taskbill
          WHERE id=#{taskId,jdbcType=VARCHAR}
     </delete>
+
+
+    <select id="getSuperId" resultType="java.lang.String">
+       select id from BASEDATA WHERE BDNAME = '车型_层级关系表' and  NAME = #{manufacturer}
+    </select>
+
+    <insert id="insertBaseData" parameterType="java.lang.String">
+       insert into BASEDATA(bdname, name, value, f_type, f_info, f_enable, codevalue, superid)
+       values ('车型_层级关系表',#{name},#{value},'2','2','0',#{codevalue},#{superid})
+    </insert>
 </mapper>

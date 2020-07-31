@@ -3,6 +3,8 @@ package cn.kn.utility.excel;
 import cn.kn.dao.excel.ExcelCode;
 import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.excel.ExcelValue;
+import cn.kn.dao.excel.Vehicle;
+import org.apache.poi.Version;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -21,6 +23,32 @@ public class ReadExcel {
 
     public ReadExcel() throws IOException {
     }
+
+    /**
+     * 专门读取永达汽车的excel表格配置车系层级
+     */
+    public List<Vehicle> readYD() {
+        DataFormatter formatter = new DataFormatter();
+        List<Vehicle> list = new ArrayList<>();
+        for (int i = 0; i <= lastRowIndex; i++) {
+            HSSFRow row = sheet.getRow(i);
+            if (row == null) {
+                break;
+            }
+            Vehicle vehicle = new Vehicle();
+            short lastCellNum = row.getLastCellNum();
+            for (int j = 0; j < lastCellNum; j++) {
+                vehicle.setManufacturer(formatter.formatCellValue(row.getCell(0)));
+                vehicle.setClassification(formatter.formatCellValue(row.getCell(1)));
+                vehicle.setCode(formatter.formatCellValue(row.getCell(2)));
+                vehicle.setVehicle(formatter.formatCellValue(row.getCell(3)));
+                break;
+            }
+            list.add(i, vehicle);
+        }
+        return list;
+    }
+
 
     /**
      * 只读取一个字段
@@ -112,7 +140,7 @@ public class ReadExcel {
     }
 
     private HSSFSheet sheetExcel() throws IOException {
-        String filePath = "D:/read.xls";
+        String filePath = "F:/520.xls";
         FileInputStream fileInputStream = new FileInputStream(filePath);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
         POIFSFileSystem fileSystem = new POIFSFileSystem(bufferedInputStream);

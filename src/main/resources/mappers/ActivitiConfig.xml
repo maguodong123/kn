@@ -127,8 +127,8 @@
 	</select>
 
     <insert id="insertActReAuditPropsStorageView">
-		<![CDATA[insert into act_re_auditprops values
-                ('1',#{taskEvent},#{billID},#{viewID},#{propID},'1',#{isNotNull},#{processID})]]>
+	  insert into act_re_auditprops values
+      ('1',#{taskEvent},#{billId},#{viewId},#{propId},'1',#{isNotNull},#{processId})
 	</insert>
 
     <select id="getAuditPropsMRP" resultType="cn.kn.dao.entity.AuditProps">
@@ -170,6 +170,10 @@
         (1,#{version}, STANDARDS(#{viewID}),#{ruleID},#{viewID},1)]]>-->
         ${sql}
     </insert>
+
+    <insert id="insertPush" parameterType="java.lang.String">
+      insert into PUSHFACE values (#{str})
+     </insert>
 
     <select id="getDataRule" resultMap="RuleMap">
         <![CDATA[select * from B_DATARULE where F_ENABLE=1]]>
@@ -225,6 +229,115 @@
          ON bl.f_datarule=b_datarule.id join l_category2bill cb
          ON cb.f_bill=bl.id
     </select>
+
+    <select id="getViewId" resultType="integer">
+        select b_dataview.id
+         FROM b_datarule join l_ruleview
+         ON l_ruleview.datarule=b_datarule.id and b_datarule.id=#{ruleId} join b_dataview
+         ON b_dataview.id=l_ruleview.dataview
+         LEFT JOIN act_re_auditview
+         ON b_dataview.id=act_re_auditview.view_id_
+        and taskevent_NAME_=#{mrpName}
+        and bill_id_=#{billId}
+        and act_def_id_=#{processId}
+        WHERE B_DATAVIEW.NAME like '%'||#{mrpName}||'%'
+    </select>
+
+    <select id="getPropId" resultType="integer">
+    select b_properties.id
+     FROM b_dataview join l_viewproperties
+     ON b_dataview.id=#{viewId} and b_dataview.id=l_viewproperties.dataview join b_properties
+     ON b_properties.id=l_viewproperties.properties
+     and b_properties.NAME in('最小包装量','标准包装量','最小包装规格','标准包装规格','包装备注','物料外尺寸')
+     LEFT JOIN act_re_auditprops
+     ON l_viewproperties.properties= act_re_auditprops.prop_id_ and bill_id_=#{billId}
+        and taskevent_name_='2100工厂-维护包装数据' and ACT_DEF_ID_=#{processId}
+    </select>
+
+    <select id="getProp" resultType="cn.kn.dao.entity.Mpas">
+      select B_PROPERTIES.NAME name,B_TASKPROPERTIES.PROPVALUE value from B_TASKPROPERTIES join B_PROPERTIES on B_TASKPROPERTIES.PROPERTIES = B_PROPERTIES.ID
+       where TASKBILL=#{task} and B_PROPERTIES.NAME in('名称','控制板型号','软件型号')
+    </select>
+
+    <select id="getPropertiesId" resultType="java.lang.String">
+       select B_TASKPROPERTIES.ID id from B_TASKPROPERTIES join B_PROPERTIES on B_TASKPROPERTIES.PROPERTIES = B_PROPERTIES.ID
+        where TASKBILL=#{task} and B_PROPERTIES.NAME ='略称'
+    </select>
+
+    <update id="updatePropValue">
+    update B_TASKPROPERTIES set PROPVALUE=#{abbreviation} where id=#{id}
+     </update>
+
+     <update id="updateTask">
+       update B_TASKBILL set DESCIBE=#{abbreviation} where ID=#{id}
+     </update>
+
+
+     <update id="processUpdateTask">
+        UPDATE b_task
+            SET res  =#{newProcess}
+            WHERE res=#{oldProcess}
+      </update>
+      <update id="processUpdateApplicant">
+            INSERT INTO ACT_RE_AUDITROLESENDCODE
+            SELECT 1,
+              #{newProcess},
+              bill_id_,
+              taskevent_name_,
+              status
+            FROM ACT_RE_AUDITROLESENDCODE
+            WHERE act_def_id_=#{oldProcess}
+        </update>
+      <update id="processUpdateProp">
+        INSERT INTO ACT_RE_AUDITPROPS
+            SELECT 1,
+              taskevent_name_,
+              bill_id_,
+              view_id_,
+              prop_id_,
+              ACT_RE_AUDITPROPS.IS_HAVE_,
+              ACT_RE_AUDITPROPS.IS_NOTNULL,
+              #{newProcess}
+            FROM ACT_RE_AUDITPROPS
+            WHERE act_def_id_=#{oldProcess}
+        </update>
+      <update id="processUpdateView">
+        INSERT INTO ACT_RE_AUDITVIEW
+        SELECT 1,
+          taskevent_name_,
+          view_id_,
+          rule_id_,
+          bill_id_,
+          ischeck_,
+          ACT_RE_AUDITVIEW.OPERABILITY_,
+         #{newProcess}
+        FROM ACT_RE_AUDITVIEW
+        WHERE act_def_id_=#{oldProcess}
+        </update>
+      <update id="processUpdateFace">
+            INSERT INTO ACT_RE_AUDITINTERFACETASKEVENT
+            SELECT 1,
+              #{newProcess},
+              bill_id_,
+              taskevent_name_,
+              interface_id_
+            FROM ACT_RE_AUDITINTERFACETASKEVENT
+            WHERE act_def_id_=#{oldProcess}
+        </update>
+      <update id="processUpdateExit">
+            INSERT INTO ACT_RE_AUDITTASKOUT
+            SELECT 1,
+              propid,
+              billid,
+              SERVICETASKID,
+              SEQFLOWID,
+              FLOWINST,
+              type,
+              value,
+             #{newProcess}
+            FROM ACT_RE_AUDITTASKOUT
+            WHERE res=#{oldProcess}
+        </update>
 
 </mapper>
 
