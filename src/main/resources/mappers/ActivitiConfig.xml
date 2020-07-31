@@ -75,12 +75,12 @@
 
     <insert id="insertActReAuditView">
 		<![CDATA[insert into act_re_auditview
-                values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1','0',#{processID})]]>
+                values('1',#{viewName},#{viewId},#{ruleId},#{billId},'1','1',#{processId})]]>
 	</insert>
 
     <insert id="insertActReAuditViewOne">
         <![CDATA[insert into act_re_auditview
-        values('1',#{viewName},#{viewID},#{ruleID},#{billID},'1',#{isNotNull},#{processID})]]>
+        values('1',#{viewName},#{viewId},#{ruleId},#{billId},'1','1',#{processId})]]>
     </insert>
 
 
@@ -97,12 +97,12 @@
 
     <delete id="deleteActReAuditViewOne">
 		<![CDATA[delete from act_re_auditview
-                where taskevent_name_=#{taskEventName} and BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
+                where taskevent_name_=#{taskEventName} and BILL_ID_ = #{billId} and VIEW_ID_ = #{viewId} and ACT_DEF_ID_=#{processId}]]>
     </delete>
 
     <delete id="deleteActReAuditProps">
 		<![CDATA[delete from act_re_auditprops
-                where BILL_ID_ = #{billID} and VIEW_ID_ = #{viewID} and ACT_DEF_ID_=#{processID}]]>
+                where BILL_ID_ = #{billId} and VIEW_ID_ = #{viewId} and ACT_DEF_ID_=#{processId}]]>
 	</delete>
 
     <delete id="deleteActReAuditPropsAndTaskEvent">
@@ -338,6 +338,7 @@
             FROM ACT_RE_AUDITTASKOUT
             WHERE res=#{oldProcess}
         </update>
+
 
 </mapper>
 

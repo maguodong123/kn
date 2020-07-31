@@ -45,7 +45,7 @@ public interface WorkflowConfigurationMapper {
     Integer[] getPropId(@Param("viewId") int view,
                         @Param("billId") int billId,
                         @Param("processId") String processId,
-                        @Param("viewName")String  viewName);
+                        @Param("viewName") String viewName);
 
 
     /**
@@ -66,10 +66,6 @@ public interface WorkflowConfigurationMapper {
 
     void deleteActReAuditViewEvent(String taskEventName, Integer viewID, Integer billID, String processID);
 
-    //删除流程视图,详细的属性查询
-    void deleteActReAuditViewOne(String taskEventName, Integer viewID, Integer billID, String processID);
-
-    void deleteActReAuditProps(Integer viewID, Integer billID, String processID);
 
     //配置流程视图与接口的对接配置在插入之前先删除,避免重复
     void deleteActReAuditInterFaceTaskEvent(String processID, Integer billID, String taskEventName);
@@ -83,9 +79,6 @@ public interface WorkflowConfigurationMapper {
 
     List<AuditProps> getAuditProps(Integer viewID, Integer billID, String taskEventName, String processID);
 
-
-    //插入act_re_auditview表
-    Integer insertActReAuditView(String viewName, Integer viewID, Integer ruleID, Integer billID, String processID);
 
     //插入act_re_auditview表单独的申请人SQL
     Integer insertActReAuditViewOne(String viewName, Integer viewID, Integer ruleID, Integer billID, Integer isNotNull, String processID);
@@ -108,6 +101,45 @@ public interface WorkflowConfigurationMapper {
                                              @Param("propId") Integer propId,
                                              @Param("isNotNull") Integer isNotNull,
                                              @Param("processId") String processId);
+
+
+    /**
+     * 插入流程视图表
+     *
+     * @param viewName  节点视图(taskEventName)名称
+     * @param viewId    视图id
+     * @param ruleId    模型id
+     * @param billId    单据id
+     * @param processId 流程id
+     */
+    void insertActReAuditView(@Param("viewName") String viewName,
+                              @Param("viewId") Integer viewId,
+                              @Param("ruleId") Integer ruleId,
+                              @Param("billId") Integer billId,
+                              @Param("processId") String processId);
+
+    /**
+     * 删除流程中的视图,插入之前先删除
+     * @param taskEventName 节点视图(taskEvent)名称
+     * @param viewId 视图id
+     * @param billId 单据id
+     * @param processId 流程id
+     */
+    void deleteActReAuditViewOne(@Param("taskEventName") String taskEventName,
+                                 @Param("viewId") Integer viewId,
+                                 @Param("billId") Integer billId,
+                                 @Param("processId") String processId);
+
+    /**
+     * 删除流程属性,同理插入之前先删除
+     * @param viewId 视图id
+     * @param billId 单据id
+     * @param processId 流程id
+     */
+    void deleteActReAuditProps(@Param("viewId") Integer viewId,
+                               @Param("billId") Integer billId,
+                               @Param("processId") String processId);
+
 
     //单独处理一条MRP的，这是仓储视图里面的，就配置一条字段
     AuditProps getAuditPropsMRP(Integer viewID, Integer billID, String taskEventName, String processID);
@@ -162,10 +194,9 @@ public interface WorkflowConfigurationMapper {
     void insertPush(String str);
 
 
-
-
     /**
      * 修改单据流程版本
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */
@@ -173,6 +204,7 @@ public interface WorkflowConfigurationMapper {
 
     /**
      * 修改申请人节点
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */
@@ -180,6 +212,7 @@ public interface WorkflowConfigurationMapper {
 
     /**
      * 修改属性权限
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */
@@ -187,6 +220,7 @@ public interface WorkflowConfigurationMapper {
 
     /**
      * 修改视图权限
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */
@@ -194,6 +228,7 @@ public interface WorkflowConfigurationMapper {
 
     /**
      * 修改传输接口
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */
@@ -201,6 +236,7 @@ public interface WorkflowConfigurationMapper {
 
     /**
      * 修改出口设置
+     *
      * @param newProcess 新流程id
      * @param oldProcess 旧流程id
      */

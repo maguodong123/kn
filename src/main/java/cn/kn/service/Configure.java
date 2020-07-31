@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.concurrent.ExecutorService;
  * 2.视图属性
  * 3.传输接口
  */
-@Controller
+@RestController
 public class Configure {
 
     @Resource
@@ -36,13 +37,21 @@ public class Configure {
     public void configureArray() {
         try {
             //初始化数据：任务单id，模型id，视图id
-            int billId, ruleId, viewId;
+            int billId;
+            int ruleId;
+            int viewId;
             //属性数组
             Integer[] prop;
+            List<ProcessModel> processModels;
             List<Process> processList = getProcess();
             for (Process process : processList) {
                 //第一步:查询出要配置的流程模型下的所有单据,正式2100工厂采购类型:11:49280125
-                List<ProcessModel> processModels = wcm.getProcessModel(process.getProcessId());
+
+                if ("正式-2100工厂流程:18:62743804".equals(process.getProcessId()) || "正式-2200工厂流程:15:62743816".equals(process.getProcessId())) {
+                    processModels = wcm.getProcessModel("正式物资编码流程");
+                } else {
+                    processModels = wcm.getProcessModel(process.getProcessId());
+                }
                 //第二步:循环所有单据,并循环对所有单据做出配置处理
                 for (ProcessModel processModel : processModels) {
                     billId = processModel.getId();
@@ -52,10 +61,14 @@ public class Configure {
                     if (viewId == 0) {
                         continue;
                     }
+                    //这个地方插入视图
+//                    wcm.deleteActReAuditViewOne(process.getViewName(), viewId, billId, process.getProcessId());
+                    wcm.insertActReAuditView(process.getViewName(), viewId, ruleId, billId, process.getProcessId());
                     //查出要插入的属性
                     prop = wcm.getPropId(viewId, billId, process.getProcessId(), process.getViewName());
                     //循环属性插入
                     for (Integer str : prop) {
+//                        wcm.deleteActReAuditProps(viewId, billId, process.getProcessId());
                         wcm.insertActReAuditPropsStorageView(process.getViewName(), billId, viewId, str, 0, process.getProcessId());
                     }
                     //配置传输接口后就大功告成了
@@ -70,16 +83,18 @@ public class Configure {
     /**
      * 更换流程版本六步走
      */
+    @RequestMapping(value = "sixSteps", method = RequestMethod.GET)
     public void sixSteps() {
         try {
-            String newProcess = null;
-            String oldProcess = null;
+            String newProcess = "正式-2100工厂流程:18:62743804";
+            String oldProcess = "正式-2100工厂流程:17:31551190";
             wcm.processUpdateTask(newProcess, oldProcess);
             wcm.processUpdateApplicant(newProcess, oldProcess);
             wcm.processUpdateProp(newProcess, oldProcess);
             wcm.processUpdateView(newProcess, oldProcess);
             wcm.processUpdateFace(newProcess, oldProcess);
             wcm.processUpdateExit(newProcess, oldProcess);
+            System.out.println("完毕");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -123,24 +138,24 @@ public class Configure {
 //    }
     public List<Process> getProcess() {
         Process process1 = new Process();
-        process1.setProcessId("正式-2100工厂流程");
+        process1.setProcessId("正式-2100工厂流程:18:62743804");
         process1.setViewName("2100工厂-维护包装数据");
         process1.setMrpName("2100工厂-MRP视图");
         process1.setInterfaceId(11);
         Process process2 = new Process();
-        process2.setProcessId("正式2100工厂采购类型");
+        process2.setProcessId("正式2100工厂采购类型:11:62743808");
         process2.setViewName("2100工厂-维护包装数据");
-        process1.setMrpName("2100工厂-MRP视图");
+        process2.setMrpName("2100工厂-MRP视图");
         process2.setInterfaceId(11);
         Process process3 = new Process();
-        process3.setProcessId("正式-2200工厂流程");
+        process3.setProcessId("正式-2200工厂流程:15:62743816");
         process3.setViewName("2200工厂-维护包装数据");
-        process1.setMrpName("2200工厂-MRP视图");
+        process3.setMrpName("2200工厂-MRP视图");
         process3.setInterfaceId(23);
         Process process4 = new Process();
-        process4.setProcessId("正式2200工厂采购类型");
+        process4.setProcessId("正式2200工厂采购类型流程:8:62743812");
         process4.setViewName("2200工厂-维护包装数据");
-        process1.setMrpName("2200工厂-MRP视图");
+        process4.setMrpName("2200工厂-MRP视图");
         process4.setInterfaceId(23);
         List<Process> processList = new ArrayList<>(4);
         processList.add(process1);
