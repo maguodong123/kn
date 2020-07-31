@@ -48,12 +48,12 @@ public class Configure {
                     billId = processModel.getId();
                     ruleId = processModel.getDataRule();
                     //查出对应的MRP视图ID
-                    viewId = wcm.getViewId(billId, ruleId, process.getProcessId(),process.getMrpName());
+                    viewId = wcm.getViewId(billId, ruleId, process.getProcessId(), process.getMrpName());
                     if (viewId == 0) {
                         continue;
                     }
                     //查出要插入的属性
-                    prop = wcm.getPropId(viewId, billId, process.getProcessId());
+                    prop = wcm.getPropId(viewId, billId, process.getProcessId(), process.getViewName());
                     //循环属性插入
                     for (Integer str : prop) {
                         wcm.insertActReAuditPropsStorageView(process.getViewName(), billId, viewId, str, 0, process.getProcessId());
@@ -121,7 +121,6 @@ public class Configure {
 //            ex.printStackTrace();
 //        }
 //    }
-
     public List<Process> getProcess() {
         Process process1 = new Process();
         process1.setProcessId("正式-2100工厂流程");

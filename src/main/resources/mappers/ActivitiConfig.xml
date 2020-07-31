@@ -251,7 +251,7 @@
      and b_properties.NAME in('最小包装量','标准包装量','最小包装规格','标准包装规格','包装备注','物料外尺寸')
      LEFT JOIN act_re_auditprops
      ON l_viewproperties.properties= act_re_auditprops.prop_id_ and bill_id_=#{billId}
-        and taskevent_name_='2100工厂-维护包装数据' and ACT_DEF_ID_=#{processId}
+        and taskevent_name_=#{viewName} and ACT_DEF_ID_=#{processId}
     </select>
 
     <select id="getProp" resultType="cn.kn.dao.entity.Mpas">

@@ -42,7 +42,10 @@ public interface WorkflowConfigurationMapper {
      * @param processId
      * @return
      */
-    Integer[] getPropId(@Param("viewId") int view, @Param("billId") int billId, @Param("processId") String processId);
+    Integer[] getPropId(@Param("viewId") int view,
+                        @Param("billId") int billId,
+                        @Param("processId") String processId,
+                        @Param("viewName")String  viewName);
 
 
     /**
