@@ -1,4 +1,5 @@
 package cn.kn.service;
+
 import cn.kn.dao.entity.PropertiesData;
 import cn.kn.dao.entity.SelectData;
 import cn.kn.dao.mapper.SelectDataMapper;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.List;
 
 @RestController
@@ -20,14 +20,11 @@ public class DeleteDuplication {
     SelectDataMapper sd;
 
     @RequestMapping(value = "DeleteDuplication", method = RequestMethod.GET)
-    public void DeleteDuplication() throws FileNotFoundException {
+    public void DeleteDuplication() {
         System.err.println("程序开始执行!");
         //把查询出来的重复数据全部存储到该集合中
         List<SelectData> selectDataList = sd.QueryAll();
         System.err.println("程序开始循环!");
-        PrintStream out = System.out;
-        PrintStream ps = new PrintStream("./deletedata.txt");
-        System.setOut(ps);
         //开始循环删除
         for (SelectData selectData : selectDataList) {
             Integer taskproperties = sd.QueryTask(selectData.getCode());//根据编码获取当前的任务单id
@@ -83,12 +80,9 @@ public class DeleteDuplication {
                         }
                     }
                 }
-
             }
-
             propertiesData.clear();
         }
-        System.setOut(out);
         System.err.println("数据删除完毕!");
     }
 
@@ -100,8 +94,5 @@ public class DeleteDuplication {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
-
-
-
 
 }
