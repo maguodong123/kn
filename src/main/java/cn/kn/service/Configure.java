@@ -87,8 +87,8 @@ public class Configure {
     @RequestMapping(value = "sixSteps", method = RequestMethod.GET)
     public void sixSteps() {
         try {
-            String newProcess = "正式2100工厂采购类型:12:63390604";
-            String oldProcess = "正式2100工厂采购类型:11:62743808";
+            String newProcess = "正式2100工厂采购类型:13:63589804";
+            String oldProcess = "正式2100工厂采购类型:12:63390604";
             wcm.processUpdateTask(newProcess, oldProcess);
             wcm.processUpdateApplicant(newProcess, oldProcess);
             wcm.processUpdateProp(newProcess, oldProcess);

@@ -13,6 +13,9 @@ import java.io.Serializable;
 
 @Data
 public class Maps implements Serializable {
-    private String key;
-    private String value;
+    String ID;
+    String NAME;
+    String TASKBILL;
+
+
 }

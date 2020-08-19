@@ -4,13 +4,9 @@ import cn.kn.dao.entity.PropertiesData;
 import cn.kn.dao.entity.SelectData;
 import cn.kn.dao.mapper.SelectDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
@@ -86,13 +82,9 @@ public class DeleteDuplication {
         System.err.println("数据删除完毕!");
     }
 
-    @Transactional
     void deleteData(Integer id) {
         Integer Mdm_Proptype = sd.deleteMdmProptype(id);
         Integer B_TASKPROPERTIES = sd.deleteTaskProperties(id);
-        if (Mdm_Proptype != 1 && B_TASKPROPERTIES != 1) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        }
     }
 
 }

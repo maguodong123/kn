@@ -1,5 +1,6 @@
 package cn.kn.utility.excel;
 
+import cn.kn.dao.entity.ThreeField;
 import cn.kn.dao.excel.ExcelCode;
 import cn.kn.dao.excel.ExcelSAP;
 import cn.kn.dao.excel.ExcelValue;
@@ -45,6 +46,32 @@ public class ReadExcel {
                 break;
             }
             list.add(i, vehicle);
+        }
+        return list;
+    }
+
+
+    /**
+     * 读取三个字段
+     * @return
+     */
+    public List<ThreeField> readExcelThreeField() {
+        DataFormatter formatter = new DataFormatter();
+        List<ThreeField> list = new ArrayList<>();
+        for (int i = 0; i <= lastRowIndex; i++) {
+            HSSFRow row = sheet.getRow(i);
+            if (row == null) {
+                break;
+            }
+            ThreeField threeField = new ThreeField();
+            short lastCellNum = row.getLastCellNum();
+            for (int j = 0; j < lastCellNum; j++) {
+                threeField.setCode(formatter.formatCellValue(row.getCell(0)));
+                threeField.setPurchase(formatter.formatCellValue(row.getCell(1)));
+                threeField.setTime(formatter.formatCellValue(row.getCell(2)));
+                break;
+            }
+            list.add(i, threeField);
         }
         return list;
     }

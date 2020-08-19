@@ -46,4 +46,16 @@
     </select>
 
 
+    <select id="getByIdAndName" resultType="cn.kn.dao.entity.table.Maps" parameterType="java.lang.String">
+        select
+            BP.id,BP.NAME,BS.TASKBILL
+        from B_TASKPROPERTIES BS
+                 join MDM_DATALIBRAY MY on BS.TASKBILL=MY.TASK
+                 join B_PROPERTIES BP on BS.PROPERTIES = BP.ID
+                 join l_viewproperties on BP.ID = L_VIEWPROPERTIES.PROPERTIES
+                 join B_DATAVIEW BD on L_VIEWPROPERTIES.DATAVIEW = BD.ID
+        where MY.CODE=#{code} and BP.NAME in('采购组','计划交货时间')
+    </select>
+
+
 </mapper>

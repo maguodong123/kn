@@ -34,4 +34,9 @@ public interface ExpansionFactoryMapper {
 
     List<String> getRuleId(String id);
 
+
+
+    List<Maps> getByIdAndName(String code);
+
+
 }
